@@ -1,0 +1,351 @@
+.login-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #F0F1F1;
+  }
+  
+  /* Carousel Section */
+  .carousel-section {
+    flex: 1;
+    background-color: #585C5F;
+    display: none;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Animated background pattern */
+  .carousel-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      linear-gradient(45deg, 
+        rgba(0, 0, 0, 0.2) 25%, 
+        transparent 25%, 
+        transparent 50%, 
+        rgba(0, 0, 0, 0.2) 50%, 
+        rgba(0, 0, 0, 0.2) 75%, 
+        transparent 75%, 
+        transparent
+      );
+    background-size: 100px 100px;
+    opacity: 0.1;
+    animation: moveBackground 20s linear infinite;
+  }
+  
+  @keyframes moveBackground {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 100px 100px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .carousel-section {
+      display: block;
+    }
+  }
+  
+  .carousel {
+    height: 100%;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .carousel .carousel-slide {
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background-color: #585C5F;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Add a subtle radial gradient */
+  .carousel .carousel-slide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.3) 100%);
+    pointer-events: none;
+  }
+  
+  .carousel-image {
+    position: relative;
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .carousel-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    animation: floatImage 6s ease-in-out infinite;
+  }
+  
+  /* Floating animation for the image */
+  @keyframes floatImage {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  /* Glowing effect on slide change */
+  .carousel .slide-enter {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  
+  .carousel .slide-enter-active {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  
+  .carousel-content {
+    position: absolute;
+    bottom: 10%;
+    left: 0;
+    right: 0;
+    color: white;
+    text-align: center;
+    z-index: 2;
+    padding: 0 2rem;
+    animation: fadeInUp 0.8s ease-out;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .carousel-content h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .carousel-content p {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    line-height: 1.3;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Add a subtle glow effect to text on hover */
+  .carousel-content:hover h2,
+  .carousel-content:hover p {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    transition: text-shadow 0.3s ease;
+  }
+  
+  /* Floating Elements */
+  .floating-elements {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  
+  .float-card {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    padding: 1rem;
+    border-radius: 12px;
+    color: white;
+  }
+  
+  .card1 {
+    top: 10%;
+    left: 15%;
+  }
+  
+  .card2 {
+    top: 30%;
+    right: 10%;
+    width: 200px;
+  }
+  
+  .card3 {
+    bottom: 30%;
+    left: 10%;
+  }
+  
+  .meal-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .calories {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+  }
+  
+  .calories span {
+    font-size: 0.875rem;
+    margin-left: 0.25rem;
+  }
+  
+  /* Login Form Section */
+  .login-form-section {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .logo-container {
+    text-align: center;
+  }
+  
+  .logo {
+    height: 200px;
+    width: auto;
+  }
+  
+  .form-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 0 1rem;
+  }
+  
+  .form-container h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .subtitle {
+    text-align: center;
+    color: #585C5F;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+  
+  .input-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 1rem;
+    padding-right: 2.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #FFF;
+  }
+  
+  .input-group input:focus {
+    border-color: #2B5CE6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(43, 92, 230, 0.1);
+  }
+  
+  .input-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  
+  .email-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23666'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'/%3E%3C/svg%3E");
+  }
+  
+  .password-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23666'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'/%3E%3C/svg%3E");
+  }
+  
+  .recovery-link {
+    text-align: right;
+    margin-bottom: 1.5rem;
+  }
+  
+  .recovery-link a {
+    color: #A65248;
+    text-decoration: none;
+    font-size: 0.875rem;
+  }
+  
+  .recovery-link a:hover {
+    text-decoration: underline;
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: 1rem;
+    background-color: #A65248;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-button:hover {
+    background-color: #964a41;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1023px) {
+    .login-form-section {
+      padding: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .login-form-section {
+      padding: 1rem;
+    }
+  
+    .form-container h1 {
+      font-size: 1.75rem;
+    }
+  
+    .subtitle {
+      font-size: 0.875rem;
+    }
+  }
+  

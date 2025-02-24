@@ -1,0 +1,17 @@
+... Instalaciones necesarias:
+
+Para instalar, colocar en la cmd (npm install "")
+
+tailwind
+react-responsive-carousel
+lucide-react
+react-router-dom
+
+
+... Paleta de Colores:
+
+Blanco: #F0F1F1
+Gris: #585C5F
+Negro: #000000
+Rojo: #A65248
+Mostaza: #C7A978
