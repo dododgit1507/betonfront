@@ -1,150 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import ClientesModal from './ClientesModal';
+import ClientesTabla from './ClientesTabla';
 import './Clientes.css';
 
 const Clientes = () => {
-  const clientesEjemplo = [
-    {
-      id: 1,
-      nombre: "Eduardo Huarcaya",
-      telefono: "925757151",
-      correo: "eduardohuarcaya04@gmail.com",
-      rol: "Cliente"
-    },
-    {
-      id: 2,
-      nombre: "Fernando Flores",
-      telefono: "912345678",
-      correo: "fernandoflores@gmail.com",
-      rol: "Administrador"
-    },
-  ];
-
+  const [clientes, setClientes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newClient, setNewClient] = useState({
-    nombre: '',
-    telefono: '',
-    correo: '',
-    rol: 'Cliente'
-  });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewClient(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  // Función para obtener los clientes de la API
+  const fetchClientes = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/usuario'); // Actualiza la URL si es necesario
+      const data = await response.json();
+      setClientes(data);
+      setLoading(false);
+    } catch (err) {
+      setError('Error al cargar los clientes.');
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Aquí iría la lógica para añadir el cliente
-    console.log('Nuevo cliente:', newClient);
-    setIsModalOpen(false);
-    setNewClient({
-      nombre: '',
-      telefono: '',
-      correo: '',
-      rol: 'Cliente'
-    });
+  // Llamar a la API cuando el componente se monte
+  useEffect(() => {
+    fetchClientes();
+  }, []);
+
+  // Función para agregar un nuevo cliente y actualizar la tabla
+  const addCliente = async (nuevoCliente) => {
+    try {
+      const response = await fetch('http://localhost:3000/registrar_cliente', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(nuevoCliente),
+      });
+
+      if (response.ok) {
+        // Si el cliente se agrega correctamente, obtenemos la lista actualizada
+        await fetchClientes(); // Llamamos a la API nuevamente para obtener los clientes actualizados
+        setIsModalOpen(false); // Cerramos el modal
+      } else {
+        console.error('Error al registrar el cliente');
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+    }
   };
 
   return (
-    <div className="pedidos-container">
-      <div className="pedidos-header">
+    <div className="clientes-container">
+      <div className="clientes-header">
         <h1>Clientes</h1>
-        <button className="btn-nuevo-pedido" onClick={() => setIsModalOpen(true)}>+ Nuevo Cliente</button>
+        <button className="btn-nuevo-cliente" onClick={() => setIsModalOpen(true)}>
+          + Nuevo Cliente
+        </button>
       </div>
 
+      <ClientesTabla clientes={clientes} loading={loading} error={error} />
+
+      {/* Modal para agregar un nuevo cliente */}
       {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>Nuevo Cliente</h2>
-              <button className="close-modal" onClick={() => setIsModalOpen(false)}>&times;</button>
-            </div>
-            <form onSubmit={handleSubmit} className="cliente-form">
-              <div className="form-group">
-                <label htmlFor="nombre">Nombre:</label>
-                <input
-                  type="text"
-                  id="nombre"
-                  name="nombre"
-                  value={newClient.nombre}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="telefono">Teléfono:</label>
-                <input
-                  type="tel"
-                  id="telefono"
-                  name="telefono"
-                  value={newClient.telefono}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="correo">Correo:</label>
-                <input
-                  type="email"
-                  id="correo"
-                  name="correo"
-                  value={newClient.correo}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="rol">Rol:</label>
-                <select
-                  id="rol"
-                  name="rol"
-                  value={newClient.rol}
-                  onChange={handleInputChange}
-                >
-                  <option value="Cliente">Cliente</option>
-                </select>
-              </div>
-              <div className="form-actions">
-                <button type="button" className="btn-cancelar" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                <button type="submit" className="btn-guardar">Guardar</button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <ClientesModal
+          closeModal={() => setIsModalOpen(false)}
+          addCliente={addCliente} // Pasamos la función para agregar el cliente
+        />
       )}
-
-      <div className="tabla-pedidos">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Teléfono</th>
-              <th>Correo</th>
-              <th>Rol</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {clientesEjemplo.map((cliente) => (
-              <tr key={cliente.id}>
-                <td>{cliente.id}</td>
-                <td>{cliente.nombre}</td>
-                <td>{cliente.telefono}</td>
-                <td>{cliente.correo}</td>
-                <td>{cliente.rol}</td>
-                <td>
-                  <button className="btn-accion">Ver</button>
-                  <button className="btn-accion">Editar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
     </div>
   );
 };

@@ -1,130 +1,71 @@
-import React, { useState } from 'react';
-import '../../styles/common.css';
+import React, { useState, useEffect } from 'react';
+import ProyectosModal from './ProyectoModal';
+import ProyectosTabla from './ProyectoTabla';
 import './Proyectos.css';
 
 const Proyectos = () => {
+  const [proyectos, setProyectos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newProject, setNewProject] = useState({
-    cup: '',
-    nombre: '',
-    suf: ''
-  });
 
-  const proyectosEjemplo = [
-    {
-      cup: 'CUP001',
-      nombre: 'Proyecto A',
-      suf: 'SUF123'
-    },
-    {
-      cup: 'CUP002',
-      nombre: 'Proyecto B',
-      suf: 'SUF456'
+  // Función para obtener los proyectos de la API
+  const fetchProyectos = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/proyecto'); // Actualiza la URL si es necesario
+      const data = await response.json();
+      setProyectos(data);
+      setLoading(false);
+    } catch (err) {
+      setError('Error al cargar los proyectos.');
+      setLoading(false);
     }
-  ];
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewProject(prev => ({
-      ...prev,
-      [name]: value
-    }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Aquí iría la lógica para añadir el proyecto
-    console.log('Nuevo proyecto:', newProject);
-    setIsModalOpen(false);
-    setNewProject({
-      cup: '',
-      nombre: '',
-      suf: ''
-    });
+  // Llamar a la API cuando el componente se monte
+  useEffect(() => {
+    fetchProyectos();
+  }, []);
+
+  // Función para agregar un nuevo proyecto y actualizar la tabla
+  const addProyecto = async (nuevoProyecto) => {
+    try {
+      const response = await fetch('http://localhost:3000/registrar_proyecto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(nuevoProyecto),
+      });
+
+      if (response.ok) {
+        // Si el proyecto se agrega correctamente, obtenemos la lista actualizada
+        await fetchProyectos(); // Llamamos a la API nuevamente para obtener los proyectos actualizados
+        setIsModalOpen(false); // Cerramos el modal
+      } else {
+        console.error('Error al registrar el proyecto');
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+    }
   };
 
   return (
     <div className="table-container">
       <div className="table-header">
         <h1>Proyectos</h1>
-        <button className="btn-nuevo" onClick={() => setIsModalOpen(true)}>+ Nuevo Proyecto</button>
+        <button className="btn-nuevo" onClick={() => setIsModalOpen(true)}>
+          + Nuevo Proyecto
+        </button>
       </div>
 
+      <ProyectosTabla proyectos={proyectos} loading={loading} error={error} />
+
+      {/* Modal para agregar un nuevo proyecto */}
       {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>Nuevo Proyecto</h2>
-              <button className="close-modal" onClick={() => setIsModalOpen(false)}>&times;</button>
-            </div>
-            <form onSubmit={handleSubmit} className="proyecto-form">
-              <div className="form-group">
-                <label htmlFor="cup">CUP:</label>
-                <input
-                  type="text"
-                  id="cup"
-                  name="cup"
-                  value={newProject.cup}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="nombre">Nombre:</label>
-                <input
-                  type="text"
-                  id="nombre"
-                  name="nombre"
-                  value={newProject.nombre}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="suf">SUF:</label>
-                <input
-                  type="text"
-                  id="suf"
-                  name="suf"
-                  value={newProject.suf}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="form-actions">
-                <button type="button" className="btn-cancelar" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                <button type="submit" className="btn-guardar">Guardar</button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <ProyectosModal
+          closeModal={() => setIsModalOpen(false)}
+          addProyecto={addProyecto} // Pasamos la función para agregar el proyecto
+        />
       )}
-
-      <div className="tabla-contenido">
-        <table>
-          <thead>
-            <tr>
-              <th>CUP</th>
-              <th>Nombre</th>
-              <th>SUF</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {proyectosEjemplo.map((proyecto, index) => (
-              <tr key={index}>
-                <td>{proyecto.cup}</td>
-                <td>{proyecto.nombre}</td>
-                <td>{proyecto.suf}</td>
-                <td>
-                  <button className="btn-accion">Ver</button>
-                  <button className="btn-accion">Editar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
     </div>
   );
 };

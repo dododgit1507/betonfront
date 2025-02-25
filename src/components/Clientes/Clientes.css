@@ -92,6 +92,17 @@
   transition: background-color 0.2s;
 }
 
+.btn-nuevo-cliente {
+  background-color: #A65248;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
 .btn-cancelar {
   background-color: #f5f5f5;
   border: 1px solid #ddd;
@@ -110,4 +121,11 @@
 
 .btn-guardar:hover {
   background-color: #357abd;
+}
+
+.clientes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
 }
