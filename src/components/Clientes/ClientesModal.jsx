@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ClientesModal = ({ onClose, addCliente }) => {
+const ClientesModal = ({ closeModal, addCliente }) => {
   const [newClient, setNewClient] = useState({
     nombre: '',
     telefono: '',
@@ -21,7 +21,7 @@ const ClientesModal = ({ onClose, addCliente }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     addCliente(newClient);
-    onClose();
+    closeModal();
   };
 
   return (
@@ -29,7 +29,7 @@ const ClientesModal = ({ onClose, addCliente }) => {
       <div className="modal-content">
         <div className="modal-header">
           <h2>Nuevo Cliente</h2>
-          <button onClick={onClose} className="close-modal">
+          <button onClick={closeModal} className="close-modal">
             &times;
           </button>
         </div>
@@ -103,7 +103,7 @@ const ClientesModal = ({ onClose, addCliente }) => {
             />
           </div>
           <div className="form-actions">
-            <button type="button" onClick={onClose} className="btn-cancelar">
+            <button type="button" onClick={closeModal} className="btn-cancelar">
               Cancelar
             </button>
             <button type="submit" className="btn-guardar">

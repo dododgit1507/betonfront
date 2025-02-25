@@ -6,6 +6,7 @@ import Proyectos from './components/Proyectos/Proyectos';
 import Envios from './components/Envios/Envios';
 import Clientes from './components/Clientes/Clientes';
 import Settings from './components/Settings/Settings';
+import Oficina from './components/Oficina/Oficina';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
         <Route path="pedidos" element={<Pedidos />} />
         <Route path="proyectos" element={<Proyectos />} />
         <Route path="envios" element={<Envios />} />
+        <Route path="oficina" element={<Oficina />} />
         <Route path="clientes" element={<Clientes />} />
         <Route path="settings" element={<Settings />} />
       </Route>
