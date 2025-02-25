@@ -8,6 +8,7 @@ const Clientes = () => {
       nombre: "Eduardo Huarcaya",
       telefono: "925757151",
       correo: "eduardohuarcaya04@gmail.com",
+      pais: "Peru",
       rol: "Cliente"
     },
     {
@@ -15,7 +16,8 @@ const Clientes = () => {
       nombre: "Fernando Flores",
       telefono: "912345678",
       correo: "fernandoflores@gmail.com",
-      rol: "Administrador"
+      pais: "Chile",
+      rol: "Cliente"
     },
   ];
 
@@ -24,6 +26,7 @@ const Clientes = () => {
     nombre: '',
     telefono: '',
     correo: '',
+    pais: '',
     rol: 'Cliente'
   });
 
@@ -44,6 +47,7 @@ const Clientes = () => {
       nombre: '',
       telefono: '',
       correo: '',
+      pais: '',
       rol: 'Cliente'
     });
   };
@@ -95,6 +99,19 @@ const Clientes = () => {
                   onChange={handleInputChange}
                   required
                 />
+              </div>
+              <div className="form-group">
+                <label htmlFor="pais">País:</label>
+                <select
+                  id="pais"
+                  name="pais"
+                  value={newClient.pais}
+                  onChange={handleInputChange}
+                >
+                  <option value="Peru">Peru</option>
+                  <option value="Chile">Chile</option>
+                  <option value="Brasil">Brasil</option>
+                </select>
               </div>
               <div className="form-group">
                 <label htmlFor="rol">Rol:</label>

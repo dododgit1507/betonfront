@@ -57,6 +57,12 @@ const Dashboard = () => {
                   <span>Clientes</span>
                 </NavLink>
               </li>
+              <li>
+                <NavLink to="/dashboard/oficina" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
+                  <Users size={20} />
+                  <span>Oficina Técnica</span>
+                </NavLink>
+              </li>
             </ul>
           </div>
 
