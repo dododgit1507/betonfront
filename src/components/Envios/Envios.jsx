@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ModalEnvios from './ModalEnvios';
 import TablaEnvios from './TablaEnvios';
+import LoadingSpinner from '../common/LoadingSpinner';
 import './Envios.css';
 
 const Envios = () => {
@@ -14,11 +15,17 @@ const Envios = () => {
     try {
       const response = await fetch('http://localhost:3000/envio');
       const data = await response.json();
-      setEnvios(data);
-      setLoading(false);
+      
+      // Añadimos un retraso artificial para mostrar el spinner
+      setTimeout(() => {
+        setEnvios(data);
+        setLoading(false);
+      }, 1000);
     } catch (err) {
-      setError('Error al cargar los envíos.');
-      setLoading(false);
+      setTimeout(() => {
+        setError('Error al cargar los envíos.');
+        setLoading(false);
+      }, 1000);
     }
   };
 
@@ -52,12 +59,16 @@ const Envios = () => {
     <div className="envios-container">
       <div className="envios-header">
         <h1>Envíos</h1>
-        <button className="btn-nuevo-envio" onClick={() => setIsModalOpen(true)}>
+        <button className="btn-nuevo" onClick={() => setIsModalOpen(true)}>
           + Nuevo Envío
         </button>
       </div>
 
-      <TablaEnvios envios={envios} loading={loading} error={error} />
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <TablaEnvios envios={envios} loading={loading} error={error} />
+      )}
 
       {isModalOpen && (
         <ModalEnvios

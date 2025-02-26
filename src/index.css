@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+/* Estilos globales */
+
+/* Estilo moderno para el scrollbar */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #954A41;
+  border-radius: 20px;
+  border: 2px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #853b33;
+}

@@ -7,6 +7,7 @@ import Envios from './components/Envios/Envios';
 import Clientes from './components/Clientes/Clientes';
 import Settings from './components/Settings/Settings';
 import Oficina from './components/Oficina/Oficina';
+import Password from './components/Password/Password';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="oficina" element={<Oficina />} />
         <Route path="clientes" element={<Clientes />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="password" element={<Password />} />
       </Route>
     </Routes>
   )

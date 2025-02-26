@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ClientesModal from './ClientesModal';
 import ClientesTabla from './ClientesTabla';
+import LoadingSpinner from '../common/LoadingSpinner';
 import './Clientes.css';
 
 const Clientes = () => {
@@ -14,11 +15,17 @@ const Clientes = () => {
     try {
       const response = await fetch('http://localhost:3000/usuario'); // Actualiza la URL si es necesario
       const data = await response.json();
-      setClientes(data);
-      setLoading(false);
+      
+      // Añadimos un retraso artificial para mostrar el spinner
+      setTimeout(() => {
+        setClientes(data);
+        setLoading(false);
+      }, 1000);
     } catch (err) {
-      setError('Error al cargar los clientes.');
-      setLoading(false);
+      setTimeout(() => {
+        setError('Error al cargar los clientes.');
+        setLoading(false);
+      }, 2000);
     }
   };
 
@@ -30,7 +37,7 @@ const Clientes = () => {
   // Función para agregar un nuevo cliente y actualizar la tabla
   const addCliente = async (nuevoCliente) => {
     try {
-      const response = await fetch('http://localhost:5060/registrar_cliente', {
+      const response = await fetch('http://localhost:3000/registrar_cliente', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nuevoCliente),
@@ -49,15 +56,20 @@ const Clientes = () => {
   };
 
   return (
+    
     <div className="clientes-container">
       <div className="clientes-header">
         <h1>Clientes</h1>
-        <button className="btn-nuevo-cliente" onClick={() => setIsModalOpen(true)}>
+        <button className="btn-nuevo" onClick={() => setIsModalOpen(true)}>
           + Nuevo Cliente
         </button>
       </div>
-
-      <ClientesTabla clientes={clientes} loading={loading} error={error} />
+      
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <ClientesTabla clientes={clientes} loading={loading} error={error} />
+      )}
 
       {/* Modal para agregar un nuevo cliente */}
       {isModalOpen && (

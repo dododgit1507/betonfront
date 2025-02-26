@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProyectosModal from './ProyectoModal';
 import ProyectosTabla from './ProyectoTabla';
+import LoadingSpinner from '../common/LoadingSpinner';
 import './Proyectos.css';
 
 const Proyectos = () => {
@@ -14,11 +15,17 @@ const Proyectos = () => {
     try {
       const response = await fetch('http://localhost:3000/proyecto'); // Actualiza la URL si es necesario
       const data = await response.json();
-      setProyectos(data);
-      setLoading(false);
+      
+      // Añadimos un retraso artificial para mostrar el spinner
+      setTimeout(() => {
+        setProyectos(data);
+        setLoading(false);
+      }, 1000);
     } catch (err) {
-      setError('Error al cargar los proyectos.');
-      setLoading(false);
+      setTimeout(() => {
+        setError('Error al cargar los proyectos.');
+        setLoading(false);
+      }, 1000);
     }
   };
 
@@ -57,7 +64,11 @@ const Proyectos = () => {
         </button>
       </div>
 
-      <ProyectosTabla proyectos={proyectos} loading={loading} error={error} />
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <ProyectosTabla proyectos={proyectos} loading={loading} error={error} />
+      )}
 
       {/* Modal para agregar un nuevo proyecto */}
       {isModalOpen && (

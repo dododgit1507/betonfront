@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ModalOficina from './ModalOficina';
 import TablaOficina from './TablaOficina';
+import LoadingSpinner from '../common/LoadingSpinner';
 import './Oficina.css';
 
 const Oficina = () => {
@@ -14,11 +15,17 @@ const Oficina = () => {
     try {
       const response = await fetch('http://localhost:3000/oficina_tecnica');
       const data = await response.json();
-      setOficinas(data);
-      setLoading(false);
+      
+      // Añadimos un retraso artificial para mostrar el spinner
+      setTimeout(() => {
+        setOficinas(data);
+        setLoading(false);
+      }, 2000);
     } catch (err) {
-      setError('Error al cargar las oficinas técnicas.');
-      setLoading(false);
+      setTimeout(() => {
+        setError('Error al cargar las oficinas técnicas.');
+        setLoading(false);
+      }, 2000);
     }
   };
 
@@ -49,15 +56,19 @@ const Oficina = () => {
   };
 
   return (
-    <div className="oficina-container">
-      <div className="oficina-header">
+    <div className="table-container">
+      <div className="table-header">
         <h1>Oficina Técnica</h1>
-        <button className="btn-nueva-oficina" onClick={() => setIsModalOpen(true)}>
+        <button className="btn-nuevo" onClick={() => setIsModalOpen(true)}>
           + Nueva Oficina
         </button>
       </div>
 
-      <TablaOficina oficinas={oficinas} loading={loading} error={error} />
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <TablaOficina oficinas={oficinas} loading={loading} error={error} />
+      )}
 
       {isModalOpen && (
         <ModalOficina

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bell, Calendar, ChartBar, HelpCircle, Home, LogOut, Menu, Settings, Users, X } from 'lucide-react';
+import { Bell, Calendar, ChartBar, Computer, Gift, HelpCircle, Home, LogOut, Menu, Settings, Users, X } from 'lucide-react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import './Dashboard.css';
 
@@ -59,8 +59,14 @@ const Dashboard = () => {
               </li>
               <li>
                 <NavLink to="/dashboard/oficina" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
-                  <Users size={20} />
+                  <Computer size={20} />
                   <span>Oficina Técnica</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/password" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
+                  <Gift size={20} />
+                  <span>Generar Codigo</span>
                 </NavLink>
               </li>
             </ul>
@@ -73,7 +79,7 @@ const Dashboard = () => {
                 <NavLink to="/dashboard/settings" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
                   <Settings size={20} />
                   <span>Settings</span>
-                </NavLink>
+                </NavLink> 
               </li>
               <li>
                 <NavLink to="/logout" className="menu-item">
