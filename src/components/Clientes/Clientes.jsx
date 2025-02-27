@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ClientesModal from './ClientesModal';
 import ClientesTabla from './ClientesTabla';
 import LoadingSpinner from '../common/LoadingSpinner';
+import Swal from 'sweetalert2';  // Importa SweetAlert2
 import './Clientes.css';
 
 const Clientes = () => {
@@ -47,6 +48,14 @@ const Clientes = () => {
         // Si el cliente se agrega correctamente, obtenemos la lista actualizada
         await fetchClientes(); // Llamamos a la API nuevamente para obtener los clientes actualizados
         setIsModalOpen(false); // Cerramos el modal
+
+        // Mostrar alerta de éxito usando SweetAlert2
+        Swal.fire({
+          title: 'Usuario Creado',
+          text: 'El nuevo usuario se ha creado correctamente',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
       } else {
         console.error('Error al registrar el cliente');
       }
@@ -56,7 +65,6 @@ const Clientes = () => {
   };
 
   return (
-    
     <div className="clientes-container">
       <div className="clientes-header">
         <h1>Clientes</h1>

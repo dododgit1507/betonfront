@@ -109,8 +109,8 @@ const Dashboard = () => {
                 className="profile-image" 
               />
               <div className="profile-details">
-                <span className="profile-name">Eduardo Dodod</span>
-                <span className="profile-email">dododsolutions@email.com</span>
+                <span className="profile-name">Jair Admin</span>
+                <span className="profile-email">jair1242@betondecken.pe</span>
               </div>
             </div>
           </div>

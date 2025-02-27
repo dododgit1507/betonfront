@@ -1,0 +1,19 @@
+.btn-generar{
+    cursor: pointer;
+    background-color: #A65248;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    color: white;
+    transition: all 0.1s;
+    margin-left: 20px;
+}
+
+.btn-generar:hover{
+    transform: translateY(-2px);
+}
+
+.modal-title{
+    font-size: 2rem;
+    font-weight: bold;
+}
