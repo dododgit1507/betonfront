@@ -104,6 +104,111 @@ tr:hover {
   border-color: #d1d5db;
 }
 
+.filters-container {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.search-container {
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+.filters-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.date-filters {
+  display: flex;
+  gap: 1rem;
+  flex: 3;
+}
+
+.producto-filter {
+  flex: 1;
+  min-width: 200px;
+}
+
+.date-select,
+.producto-select {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.date-select {
+  flex: 1;
+  min-width: 120px;
+}
+
+.producto-select {
+  width: 100%;
+}
+
+.date-select:focus,
+.producto-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.date-select:disabled {
+  background-color: #f1f5f9;
+  cursor: not-allowed;
+}
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+.paginacion button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.paginacion button:hover {
+  background-color: #f0f0f0;
+}
+
+
+
 @media (max-width: 768px) {
   .pedidos-header {
     flex-direction: column;
@@ -118,4 +223,36 @@ tr:hover {
   table {
     min-width: 800px;
   }
+
+  .filters-row {
+    flex-direction: column;
+  }
+
+  .date-filters {
+    flex-direction: column;
+  }
+
+  .date-select,
+  .producto-select {
+    width: 100%;
+  }
+}
+
+/*Estilos botones de acciones*/
+
+.btn-acciones{
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #F0F1F1;
+  color: #585C5F;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.editar{
+  background-color: #C7A978;
+  color: white;
+  font-weight: 400;
 }

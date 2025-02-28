@@ -9,22 +9,22 @@ const ProyectosTabla = ({ proyectos, loading, error }) => {
       <table>
         <thead>
           <tr>
-            <th>ID</th>
+            <th>CUP</th>
             <th>Nombre</th>
-            <th>Suf</th>
+            <th>SUF</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {proyectos.length > 0 ? (
             proyectos.map((proyecto) => (
-              <tr key={proyecto.id || proyecto.nombre}>
+              <tr key={proyecto.id_proyecto_cup || proyecto.nombre}>
                 <td>{proyecto.id_proyecto_cup}</td>
                 <td>{proyecto.nombre}</td>
                 <td>{proyecto.suf}</td>
                 <td>
-                  <button>Ver</button>
-                  <button>Editar</button>
+                  {/* <button>Ver</button> */}
+                  <button className='btn-acciones editar'>Editar</button>
                 </td>
               </tr>
             ))

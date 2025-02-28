@@ -21,6 +21,35 @@
   color: #4b5563;
 }
 
+.profile-section {
+  padding: 0 10px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.profile-image {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin-bottom: 10PX;
+}
+
+.user-profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-section h3 {
+  padding: 10px 0;
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
 /* Overlay for mobile */
 .sidebar-overlay {
   display: none;

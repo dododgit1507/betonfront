@@ -13,16 +13,16 @@ const PedidoTabla = ({ pedidos, loading, error }) => {
             <th>Fecha</th>
             <th>Hora</th>
             <th>Nivel</th>
-            <th>Metros Cuadrados</th>
-            <th>Metros Lineales</th>
-            <th>Kilogramos</th>
-            <th>Frisos</th>
-            <th>Chatas</th>
-            <th>Código Plano</th>
+            <th>M2</th>
+            <th>ML</th>
+            <th>KG</th>
+            <th>Frisos(ML)</th>
+            <th>Chatas(KG)</th>
+            <th>Cod. Plano</th>
             <th>Planta</th>
-            <th>Proyecto CUP</th>
+            <th>Proyecto</th>
             <th>Producto</th>
-            <th>Usuario</th>
+            <th>Cliente</th>
             <th>Transporte</th>
             <th>Oficina</th>
             <th>Acciones</th>
@@ -48,9 +48,9 @@ const PedidoTabla = ({ pedidos, loading, error }) => {
                 <td>{pedido.nombre_usuario}</td> {/* Nombre del Usuario */}
                 <td>{pedido.nombre_transporte}</td> {/* Nombre del Transporte */}
                 <td>{pedido.nombre_oficina}</td> {/* Nombre de la Oficina */}
-                <td>
-                  <button>Ver</button>
-                  <button>Editar</button>
+                <td className='td-acciones'>
+                  {/* <button className='btn-acciones ver'>Ver</button> */}
+                  <button className='btn-acciones editar'>Editar</button>
                 </td>
               </tr>
             ))

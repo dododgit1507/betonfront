@@ -20,14 +20,14 @@ const ModalEnvios = ({ closeModal, addEnvio }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addEnvio(nuevoEnvio);
+    addEnvio(nuevoEnvio);  // Llama a la función de agregar envío con los datos del estado
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
-          <h2>Nuevo Envío</h2>
+          <h1 className='modal-title'>Nuevo Envío</h1>
           <button onClick={closeModal} className="close-modal">
             &times;
           </button>
@@ -46,36 +46,41 @@ const ModalEnvios = ({ closeModal, addEnvio }) => {
           </div>
           <div className="form-group">
             <label htmlFor="observacion">Observación:</label>
-            <input
-              type="text"
+            <select
               id="observacion"
               name="observacion"
               value={nuevoEnvio.observacion}
               onChange={handleInputChange}
               required
-            />
+            >
+              <option value="">Seleccione una opción</option>
+              <option value="esta a tiempo">Está a tiempo</option>
+            </select>
           </div>
           <div className="form-group">
             <label htmlFor="valorizado">Valorizado:</label>
-            <input
-              type="number"
+            <select
               id="valorizado"
               name="valorizado"
               value={nuevoEnvio.valorizado}
               onChange={handleInputChange}
-              required
-            />
+            >
+              <option value="">Seleccione una opción</option>
+              <option value="ENVIADO">ENVIADO</option>
+            </select>
           </div>
           <div className="form-group">
             <label htmlFor="facturado">Facturado:</label>
-            <input
-              type="number"
+            <select
               id="facturado"
               name="facturado"
               value={nuevoEnvio.facturado}
               onChange={handleInputChange}
-              required
-            />
+            >
+              <option value="">Seleccione una opción</option>
+              <option value="ENVIADO">ENVIADO</option>
+              <option value="PENDIENTE">PENDIENTE</option>
+            </select>
           </div>
           <div className="form-group">
             <label htmlFor="pagado">Pagado:</label>
@@ -84,6 +89,7 @@ const ModalEnvios = ({ closeModal, addEnvio }) => {
               id="pagado"
               name="pagado"
               value={nuevoEnvio.pagado}
+              step="0.01"  // Permite valores decimales
               onChange={handleInputChange}
               required
             />

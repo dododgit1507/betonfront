@@ -15,6 +15,7 @@
   border-radius: 6px;
   color: white;
   transition: all 0.1s;
+  margin-left: 10px;
 }
 
 .btn-generate:hover{
@@ -111,3 +112,9 @@
     }
   }
   
+  .modal-footer{
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }

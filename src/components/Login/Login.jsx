@@ -1,102 +1,134 @@
 import React, { useState } from 'react';
-import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { useNavigate } from 'react-router-dom';
+import InfiniteLooper from '../InfiniteLooper/InfiniteLooper';
+import { carruselContent } from '../../helpers/carrusel';
+import { useToast } from '@chakra-ui/react'; // Importar useToast de Chakra UI
 import './Login.css';
 
 const Login = () => {
+  const toast = useToast(); // Instanciar el hook useToast
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
+    setLoading(true); // Mostrar un estado de carga mientras se realiza la petición
+
+    try {
+      const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Redirigir al dashboard si el login es exitoso
+        navigate('/dashboard/pedidos');
+      } else {
+        // Mostrar mensaje de error con toast si hay algún problema con la autenticación
+        setError(data.message);
+        toast({
+          title: 'Error',
+          description: 'Correo o contraseña incorrectos.',
+          status: 'error',
+          duration: 3000,
+          position: 'bottom-right',
+          isClosable: true,
+          containerStyle: {
+            marginBottom: '20px',
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      setError('Error en el servidor. Inténtalo más tarde.');
+      toast({
+        title: 'Error en el servidor',
+        description: 'Inténtalo más tarde.',
+        status: 'error',
+        duration: 3000,
+        position: 'bottom-right',
+        isClosable: true,
+        containerStyle: {
+          marginBottom: '20px',
+        },
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const carouselItems = [
-    {
-      title: "GOBESA INGENIEROS - ANDALUCIA",
-      subtitle: "6,192.71 m2",
-      image: "/images/proyecto1.webp"
-    },
-    {
-      title: "CREATIVA - TODAY",
-      subtitle: "7,403.02 m2",
-      image: "/images/proyecto2.webp"
-    },
-    {
-      title: "BINDA - TEN",
-      subtitle: "4,490.840 m2",
-      image: "/images/proyecto3.webp"
-    },
-  ];
 
   return (
     <div className="login-container">
-      {/* Left Side - Carousel */}
-      <div className="carousel-section">
-        <Carousel
-          showArrows={false}
-          showStatus={false}
-          showThumbs={false}
-          infiniteLoop
-          autoPlay
-          interval={5000}
-          className="carousel"
-        >
-          {carouselItems.map((item, index) => (
-            <div key={index} className="carousel-slide">
-              <div className="carousel-image">
-                <img src={item.image} alt={item.title} />
-              </div>
-              <div className="carousel-content">
-                <h2>{item.title}</h2>
-                <p>{item.subtitle}</p>
-              </div>
-            </div>
-          ))}
-        </Carousel>
-      </div>
-
-      {/* Right Side - Login Form */}
-      <div className="login-form-section">
+      <div className="login-left">
         <div className="logo-container">
-          <img src="/images/betondecken-logo.png" alt="Logo" className="logo" />
+          <img src="/images/betondecken-logo.png" alt="Betondecken Logo" />
         </div>
-        <div className="form-container">
-          <p className="subtitle">
-            Bienvenido al sistema de Betondecken <br />
-            Inicia sesión para gestionar tus pedidos
-          </p>
-
+        <div className="carrusel">
+          <InfiniteLooper speed={40} direction="left">
+            {carruselContent.map((item) => (
+              <div className="carrusel-item" key={item.id}>
+                <img src={`/images/proyecto${item.id}.webp`} alt={item.nombre} />
+                <div className="carrusel-content">
+                  <h3>{item.nombre}</h3>
+                  <p>{item.m2}</p>
+                </div>
+              </div>
+            ))}
+          </InfiniteLooper>
+        </div>
+      </div>
+      
+      <div className="login-right">
+        <div className="login-form-container">
+          <h1>BIENVENIDO A<br />BETONDECKEN</h1>
+          
           <form onSubmit={handleSubmit}>
-            <div className="input-group">
+            <div className="form-group-login">
+              <label>Email</label>
               <input
                 type="email"
+                placeholder="Coloca tu correo electrónico"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
                 required
               />
-              <span className="input-icon email-icon"></span>
             </div>
 
-            <div className="input-group">
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-                required
-              />
-              <span className="input-icon password-icon"></span>
+            <div className="form-group-login">
+              <label>Contraseña</label>
+              <div className="password-input-login">
+                <input
+                  type="password"
+                  placeholder="Coloca tu contraseña"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button type="button" className="toggle-password-login">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
             </div>
 
-            <div className="recovery-link">
-              <a href="#">Recovery Password</a>
+            <div className="forgot-password-login">
+              <a href="#">¿Olvidaste tu contraseña?</a>
             </div>
 
             <button type="submit" className="login-button">
-              Login
+              Ingresar
             </button>
           </form>
         </div>

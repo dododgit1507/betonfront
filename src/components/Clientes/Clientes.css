@@ -11,6 +11,12 @@
   z-index: 1000;
 }
 
+.spinner-container {
+  z-index: 2000; /* Asegúrate de que sea mayor que el modal */
+}
+
+
+
 .modal-content {
   background-color: white;
   padding: 20px;
@@ -110,7 +116,7 @@
 }
 
 .btn-guardar {
-  background-color: #4a90e2;
+  background-color: #A65248;
   border: none;
   color: white;
 }
@@ -119,8 +125,40 @@
   background-color: #eee;
 }
 
+
+#page-button.active {
+  background-color: #917b58;
+  color: white;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 10px;
+  transition: all 0.2s;
+}
+
+#page-button {
+  background-color: #C8A978;
+  padding: 8px 16px;
+  color: white;
+  font-weight: 500;
+  border-radius: 4px;
+  font-size: 17px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+#page-button:hover {
+  transform: translateY(-4px);
+  background-color: #947e5c;
+}
+
 .btn-guardar:hover {
-  background-color: #357abd;
+  background-color: #a23226;
 }
 
 .clientes-container {
@@ -132,7 +170,7 @@
   text-align: center;
   margin-bottom: 30px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   gap: 20px;
 }
@@ -142,4 +180,50 @@
   color: #333;
   margin: 0;
   font-weight: bold;
+}
+
+.search-container {
+  padding: 1rem 0;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+.paginacion button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.paginacion button:hover {
+  background-color: #f0f0f0;
 }

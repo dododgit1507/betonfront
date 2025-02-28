@@ -75,17 +75,35 @@ const Dashboard = () => {
           <div className="menu-section">
             <h3 className="menu-title">GENERAL</h3>
             <ul>
-              <li>
+              {/* <li>
                 <NavLink to="/dashboard/settings" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
                   <Settings size={20} />
                   <span>Settings</span>
                 </NavLink> 
-              </li>
+              </li> */}
               <li>
                 <NavLink to="/logout" className="menu-item">
                   <LogOut size={20} />
                   <span>Logout</span>
                 </NavLink>
+              </li>
+            </ul>
+          </div>
+
+          <div className='profile-section'>
+            <h3 className='menu-title'>Cuenta</h3>
+            <ul>
+              <li>
+                <div className='user-profile'>
+                  <img 
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+                    alt="Profile" 
+                    className="profile-image" 
+                  />
+                  <div className="profile-details">
+                    <span className="profile-name">Jair Admin</span>
+                  </div>
+                </div>
               </li>
             </ul>
           </div>
@@ -95,26 +113,6 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="main-content">
         {/* Top Bar */}
-        <div className="top-bar">
-          <div className="search-bar">
-            <input type="text" placeholder="Search task..." />
-          </div>
-          
-          <div className="user-profile">
-            <Bell className="notification-icon" size={20} />
-            <div className="profile-info">
-              <img 
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
-                alt="Profile" 
-                className="profile-image" 
-              />
-              <div className="profile-details">
-                <span className="profile-name">Jair Admin</span>
-                <span className="profile-email">jair1242@betondecken.pe</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Dashboard Content - Kept Empty as Requested */}
         <div className="dashboard-content">

@@ -72,18 +72,31 @@ const PedidoModal = ({ closeModal, addPedido }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    // Si el campo es código_pedido, limitar a 10 caracteres
+    if (name === 'codigo_pedido' && value.length > 10) return;
+
     setNewPedido((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
-      // Imprimir el contenido de newPedido
-    console.log('Enviando al backend:', newPedido)
-    addPedido(newPedido); 
-    closeModal(); 
+    console.log('Enviando al backend:', newPedido);
+    addPedido(newPedido);
+    closeModal();
+  };
+
+  const copiarCodigo = () => {
+    const codigo = document.getElementById('codigo_pedido_input').value;
+    navigator.clipboard.writeText(codigo).then(() => {
+      alert('Código copiado al portapapeles');
+    }).catch(err => {
+      console.error('Error copiando el código: ', err);
+    });
   };
 
   return (
@@ -102,18 +115,19 @@ const PedidoModal = ({ closeModal, addPedido }) => {
             <label>Código de Pedido</label>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <input
-                type="text"
+                id="codigo_pedido_input"
                 name="codigo_pedido"
                 value={newPedido.codigo_pedido}
-                readOnly
+                onChange={handleInputChange}
+                rows="3"
+                style={{ width: '100%' }}
               />
               <button
                 type="button"
-                onClick={generarCodigoPedido}
+                onClick={copiarCodigo}
                 className="btn-generate"
-                style={{ marginLeft: '10px' }}
               >
-                Generar
+                Copiar
               </button>
             </div>
           </div>
@@ -330,10 +344,10 @@ const PedidoModal = ({ closeModal, addPedido }) => {
           </div>
 
           <div className="modal-footer">
-            <button type="submit" className="btn-save">Guardar</button>
-            <button type="button" onClick={closeModal} className="btn-cancel">
+            <button type="button" onClick={closeModal} className="btn-cancelar">
               Cancelar
             </button>
+            <button type="submit" className="btn-guardar">Guardar</button>  
           </div>
         </form>
       </div>

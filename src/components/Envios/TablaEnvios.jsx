@@ -22,7 +22,7 @@ const TablaEnvios = ({ envios, loading, error }) => {
           {envios.length > 0 ? (
             envios.map((envio) => (
               <tr key={envio.id}>
-                <td>{envio.id}</td>
+                <td>{envio.id_envio}</td>
                 <td>{envio.fecha_envio}</td>
                 <td>{envio.observacion}</td>
                 <td>{envio.valorizado}</td>

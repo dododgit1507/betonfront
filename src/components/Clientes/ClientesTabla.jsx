@@ -27,8 +27,8 @@ const ClientesTabla = ({ clientes, loading, error }) => {
                 <td>{cliente.correo}</td>
                 <td>{cliente.rol}</td>
                 <td>
-                  <button>Ver</button>
-                  <button>Editar</button>
+                  {/* <button>Ver</button> */}
+                  <button className='btn-acciones editar'>Editar</button>
                 </td>
               </tr>
             ))

@@ -57,7 +57,7 @@ const Oficina = () => {
 
   return (
     <div className="table-container">
-      <div className="table-header">
+      <div className="table-header-oficina">
         <h1>Oficina Técnica</h1>
         <button className="btn-nuevo" onClick={() => setIsModalOpen(true)}>
           + Nueva Oficina
