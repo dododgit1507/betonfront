@@ -10,14 +10,16 @@ const TablaOficina = ({ oficinas, loading, error }) => {
         <thead>
           <tr>
             <th>ID</th>
+            <th>Tecnico</th>
             <th>Especialidad</th>
           </tr>
         </thead>
         <tbody>
           {oficinas.length > 0 ? (
             oficinas.map((oficina) => (
-              <tr key={oficina.id_oficina}>
-                <td>{oficina.id_oficina}</td>
+              <tr key={oficina.id}>
+                <td>{oficina.id}</td>
+                <td>{oficina.nombre}</td>
                 <td>{oficina.especialidad}</td>
               </tr>
             ))

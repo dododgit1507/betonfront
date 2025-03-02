@@ -9,7 +9,7 @@ const ClientesTabla = ({ clientes, loading, error }) => {
       <table>
         <thead>
           <tr>
-            <th>ID</th>
+            {/* <th>ID</th> */}
             <th>Nombre</th>
             <th>Teléfono</th>
             <th>Correo</th>
@@ -21,7 +21,7 @@ const ClientesTabla = ({ clientes, loading, error }) => {
           {clientes.length > 0 ? (
             clientes.map((cliente) => (
               <tr key={cliente.id || cliente.correo}>
-                <td>{cliente.id}</td>
+                {/* <td>{cliente.id}</td> */}
                 <td>{cliente.nombre}</td>
                 <td>{cliente.telefono}</td>
                 <td>{cliente.correo}</td>

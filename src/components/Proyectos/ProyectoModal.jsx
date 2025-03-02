@@ -11,21 +11,24 @@ const ProyectosModal = ({ closeModal, addProyecto }) => {
 
   const generarCodigo = () => {
     const fechaHoy = new Date();
-    const anio = fechaHoy.getFullYear();
+    const anio = fechaHoy.getFullYear().toString().slice(-2); // Tomamos los últimos 2 dígitos del año
     const mes = String(fechaHoy.getMonth() + 1).padStart(2, '0'); // El mes es 0-indexed
     const dia = String(fechaHoy.getDate()).padStart(2, '0');
     const numeroAleatorio = Math.floor(100 + Math.random() * 900); // Número aleatorio de 3 dígitos
-  
-    const codigoGenerado = `BD-${anio}${mes}${dia}-${numeroAleatorio}`;
+
+    // Generamos el CUP
+    const codigoGenerado = `BD-20${anio}-${mes}-${dia}-${numeroAleatorio}`;
     
-    // Establecemos el código y el sufijo basado en una parte del código generado
+    // Generamos el SUF
+    const suf = `${anio}${dia}${numeroAleatorio}`;
+
+    // Establecemos el código y el sufijo
     setNuevoProyecto((prev) => ({
       ...prev,
       id_proyecto_cup: codigoGenerado,
-      suf: codigoGenerado.slice(-6), // Aquí estamos tomando los últimos 6 caracteres como suf
+      suf: suf, // Aquí estamos usando el SUF generado
     }));
   };
-  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -80,7 +83,7 @@ const ProyectosModal = ({ closeModal, addProyecto }) => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="suf">Suf:</label>
+            <label htmlFor="suf">SUF:</label>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <input
                 type="text"
