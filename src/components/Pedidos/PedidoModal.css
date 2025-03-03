@@ -5,8 +5,6 @@
   font-weight: bold;
 }
 
-
-
 .btn-generate{
   cursor: pointer;
   background-color: #A65248;
@@ -22,99 +20,116 @@
   transform: translateY(-2px);
 }
 
-
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content-pedido {
+  background-color: #fff;
+  width: 90%; /* Ajusta el tamaño del modal */
+  max-width: 700px; /* Ancho máximo para pantallas grandes */
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  max-height: 90vh; /* Limita el alto del modal */
+  overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.pedido-form{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+
+@media (max-width: 768px) {
+  .modal-content-pedido {
+    max-width: 95%; /* Ajusta el tamaño del modal */
+  }
+  .pedido-form{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
+    flex-direction: column;
   }
-  
-  .modal-content {
-    background-color: #fff;
-    width: 90%; /* Ajusta el tamaño del modal */
-    max-width: 500px; /* Ancho máximo para pantallas grandes */
-    padding: 20px;
-    border-radius: 10px;
-    position: relative;
-    max-height: 90vh; /* Limita el alto del modal */
-    overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+}
+
+.pedido-form .form-group {
+  margin-bottom: 15px;
+}
+
+.pedido-form label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.pedido-form input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-cancelar,
+.btn-guardar {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-cancelar {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-guardar {
+  background-color: #4caf50;
+  color: white;
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 600px) {
+  .modal-content-pedido {
+    max-width: 95%; /* Ancho casi total en pantallas pequeñas */
   }
-  
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .close-modal {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-  }
-  
-  .pedido-form .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .pedido-form label {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
-  
-  .pedido-form input {
-    width: 100%;
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .btn-cancelar,
-  .btn-guardar {
-    padding: 10px 20px;
-    font-size: 14px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .btn-cancelar {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  .btn-guardar {
-    background-color: #4caf50;
-    color: white;
-  }
-  
-  /* Ajuste para pantallas pequeñas */
-  @media (max-width: 600px) {
-    .modal-content {
-      max-width: 95%; /* Ancho casi total en pantallas pequeñas */
-    }
-  }
-  
-  .modal-footer{
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-  }
+}
+
+.modal-footer-pedido{
+  grid-column: 3/4;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  align-items: flex-end;
+}

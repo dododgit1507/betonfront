@@ -1,30 +1,34 @@
 import React from 'react';
+import './PedidoTabla.css';
 
 const PedidoTabla = ({ pedidos, loading, error }) => {
   return (
-    <div className="tabla-pedidos">
+    <div className="tabla-container">
       {loading && <p>Cargando pedidos...</p>}
       {error && <p>{error}</p>}
 
-      <table>
+      <table className="tabla-pedidos">
         <thead>
           <tr>
-            <th>Código Pedido</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>Nivel</th>
-            <th>M2</th>
-            <th>ML</th>
-            <th>KG</th>
-            <th>Frisos(ML)</th>
-            <th>Chatas(KG)</th>
-            <th>Cod. Plano</th>
-            <th>Planta</th>
-            <th>Proyecto</th>
-            <th>Producto</th>
-            <th>Cliente</th>
-            <th>Transporte</th>
-            <th>Oficina</th>
+            <th className='th-verde'>Proyecto</th>
+            <th className='th-verde'>Cod_pedido</th>
+            <th className='th-azul'>Tipo</th>
+            <th className='th-azul'>Programa</th>
+            <th className='th-azul'>Oficina</th>
+            <th className='th-azul'>M2</th>
+            <th className='th-azul'>ML</th>
+            <th className='th-azul'>KG</th>
+            <th className='th-azul'>Frisos(ML)</th>
+            <th className='th-azul'>Chatas(KG)</th>
+            <th className='th-verde'>Fecha</th>
+            <th className='th-verde'>Hora</th>
+            <th className='th-verde'>Nivel</th>
+            <th className='th-amarillo'>Cod_Plano</th>
+            <th className='th-amarillo'>Planta</th>
+            <th className='th-celeste'>Cliente</th>
+            <th className='th-celeste'>Cup</th>
+            <th className='th-celeste'>Suf</th>
+            <th className='th-celeste'>Transporte</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -32,22 +36,25 @@ const PedidoTabla = ({ pedidos, loading, error }) => {
           {pedidos.length > 0 ? (
             pedidos.map((pedido) => (
               <tr key={pedido.codigo_pedido}>
+                <td>{pedido.nombre_proyecto_cup}</td>
                 <td>{pedido.codigo_pedido}</td>
+                <td>{pedido.nombre_producto}</td>
+                <td>{pedido.oficina_especialidad}</td>
+                <td>{pedido.nombre_oficina}</td>
+                <td>{pedido.m2}</td>
+                <td>{pedido.ml}</td>
+                <td>{pedido.kg}</td>
+                <td>{pedido.frisos_ml}</td>
+                <td>{pedido.chatas_kg}</td>
                 <td>{new Date(pedido.fecha).toLocaleDateString()}</td>
                 <td>{pedido.hora}</td>
                 <td>{pedido.nivel}</td>
-                <td>{pedido.metros_cuadrados}</td>
-                <td>{pedido.metros_lineales}</td>
-                <td>{pedido.kilogramos}</td>
-                <td>{pedido.frisos}</td>
-                <td>{pedido.chatas}</td>
                 <td>{pedido.codigo_plano}</td>
                 <td>{pedido.planta}</td>
-                <td>{pedido.nombre_proyecto_cup}</td> {/* Nombre del Proyecto CUP */}
-                <td>{pedido.nombre_producto}</td> {/* Nombre del Producto */}
-                <td>{pedido.nombre_usuario}</td> {/* Nombre del Usuario */}
-                <td>{pedido.nombre_transporte}</td> {/* Nombre del Transporte */}
-                <td>{pedido.nombre_oficina}</td> {/* Nombre de la Oficina */}
+                <td>{pedido.nombre_usuario}</td>
+                <td>{pedido.id_proyecto_cup}</td>
+                <td>{pedido.suf}</td>
+                <td>{pedido.nombre_transporte}</td>
                 <td className='td-acciones'>
                   {/* <button className='btn-acciones ver'>Ver</button> */}
                   <button className='btn-acciones editar'>Editar</button>

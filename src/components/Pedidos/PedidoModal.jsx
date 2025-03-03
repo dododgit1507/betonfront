@@ -76,12 +76,59 @@ const PedidoModal = ({ closeModal, addPedido }) => {
     // Si el campo es código_pedido, limitar a 10 caracteres
     if (name === 'codigo_pedido' && value.length > 10) return;
 
-    setNewPedido((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setNewPedido((prev) => {
+      const updatedPedido = {
+        ...prev,
+        [name]: value,
+      };
+
+      // Si el cambio es en el producto, aplicar las reglas de bloqueo
+      if (name === 'id_producto') {
+        const selectedProduct = productos.find(p => p.id_producto.toString() === value);
+        if (selectedProduct) {
+          // PL: Ocultar ML y Frisos
+          if (selectedProduct.tipo === 'PL') {
+            updatedPedido.metros_lineales = '0';
+            updatedPedido.frisos = '0';
+          }
+          // PL + FR: Ocultar ML
+          else if (selectedProduct.tipo === 'PL + FR') {
+            updatedPedido.metros_lineales = '0';
+          }
+          // PL + CLJ: Ocultar Frisos
+          else if (selectedProduct.tipo === 'PL + CLJ') {
+            updatedPedido.frisos = '0';
+          }
+        }
+      }
+
+      // Si el cambio es en la planta, actualizar el código de plano
+      if (name === 'planta') {
+        if (value === 'PT-ROTACIÓN') {
+          updatedPedido.codigo_plano = 'P.R';
+        } else if (value) {
+          updatedPedido.codigo_plano = value;
+        }
+      }
+
+      return updatedPedido;
+    });
   };
 
+  // Función auxiliar para determinar si mostrar campos específicos
+  const shouldShowField = (fieldType) => {
+    const selectedProduct = productos.find(p => p.id_producto.toString() === newPedido.id_producto);
+    if (!selectedProduct) return true;
+
+    switch (fieldType) {
+      case 'metros_lineales':
+        return !(selectedProduct.tipo === 'PL' || selectedProduct.tipo === 'PL + FR');
+      case 'frisos':
+        return !(selectedProduct.tipo === 'PL' || selectedProduct.tipo === 'PL + CLJ');
+      default:
+        return true;
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -101,7 +148,7 @@ const PedidoModal = ({ closeModal, addPedido }) => {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
+      <div className="modal-content-pedido">
         <div className="modal-header">
           <h1 className='modaltitle'>Nuevo Pedido</h1>
           <button onClick={closeModal} className="close-modal">
@@ -133,6 +180,60 @@ const PedidoModal = ({ closeModal, addPedido }) => {
           </div>
 
           <div className="form-group">
+            <label htmlFor="id_proyecto_cup">Proyecto CUP:</label>
+            <select
+              id="id_proyecto_cup"
+              name="id_proyecto_cup"
+              value={newPedido.id_proyecto_cup}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">--Seleccione un proyecto</option>
+              {proyectosCUP.map((proyecto) => (
+                <option key={proyecto.id} value={proyecto.id_proyecto_cup}>
+                  {proyecto.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="id_usuario">Cliente:</label>
+            <select
+              id="id_usuario"
+              name="id_usuario"
+              value={newPedido.id_usuario}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">--Seleccione un usuario</option>
+              {usuarios.map((usuario) => (
+                <option key={usuario.id} value={usuario.id}>
+                  {usuario.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="id_producto">Producto:</label>
+            <select
+              id="id_producto"
+              name="id_producto"
+              value={newPedido.id_producto}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">--Seleccione un producto</option>
+              {productos.map((producto) => (
+                <option key={producto.id} value={producto.id_producto}>
+                  {producto.tipo}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
             <label htmlFor="fecha">Fecha:</label>
             <input
               type="date"
@@ -157,18 +258,6 @@ const PedidoModal = ({ closeModal, addPedido }) => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="nivel">Nivel:</label>
-            <input
-              type="text"
-              id="nivel"
-              name="nivel"
-              value={newPedido.nivel}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
             <label htmlFor="metros_cuadrados">Metros Cuadrados:</label>
             <input
               type="number"
@@ -180,17 +269,20 @@ const PedidoModal = ({ closeModal, addPedido }) => {
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="metros_lineales">Metros Lineales:</label>
-            <input
-              type="number"
-              id="metros_lineales"
-              name="metros_lineales"
-              value={newPedido.metros_lineales}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+          {/* Metros Lineales - mostrar solo si corresponde */}
+          {shouldShowField('metros_lineales') && (
+            <div className="form-group">
+              <label htmlFor="metros_lineales">Metros Lineales:</label>
+              <input
+                type="number"
+                id="metros_lineales"
+                name="metros_lineales"
+                value={newPedido.metros_lineales}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+          )}
 
           <div className="form-group">
             <label htmlFor="kilogramos">Kilogramos:</label>
@@ -204,17 +296,20 @@ const PedidoModal = ({ closeModal, addPedido }) => {
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="frisos">Frisos:</label>
-            <input
-              type="number"
-              id="frisos"
-              name="frisos"
-              value={newPedido.frisos}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+          {/* Frisos - mostrar solo si corresponde */}
+          {shouldShowField('frisos') && (
+            <div className="form-group">
+              <label htmlFor="frisos">Frisos:</label>
+              <input
+                type="number"
+                id="frisos"
+                name="frisos"
+                value={newPedido.frisos}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+          )}
 
           <div className="form-group">
             <label htmlFor="chatas">Chatas:</label>
@@ -226,6 +321,42 @@ const PedidoModal = ({ closeModal, addPedido }) => {
               onChange={handleInputChange}
               required
             />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="id_oficina">Oficina Técnica:</label>
+            <select
+              id="id_oficina"
+              name="id_oficina"
+              value={newPedido.id_oficina}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">--Seleccione un técnico</option>
+              {oficinas.map((oficina) => (
+                <option key={oficina.id} value={oficina.id}>
+                  {oficina.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="planta">Planta:</label>
+            <select
+              id="planta"
+              name="planta"
+              value={newPedido.planta}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">--Seleccione una opción</option>
+              <option value="PLANTA-1">PLANTA 1</option>
+              <option value="PLANTA-2">PLANTA 2</option>
+              <option value="PLANTA-4">PLANTA 4</option>
+              <option value="PT-AREQUIPA">PT AREQUIPA</option>
+              <option value="PT-ROTACIÓN">PT ROTACIÓN</option>
+            </select>
           </div>
 
           <div className="form-group">
@@ -241,70 +372,15 @@ const PedidoModal = ({ closeModal, addPedido }) => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="planta">Planta:</label>
+            <label htmlFor="nivel">Nivel:</label>
             <input
               type="text"
-              id="planta"
-              name="planta"
-              value={newPedido.planta}
+              id="nivel"
+              name="nivel"
+              value={newPedido.nivel}
               onChange={handleInputChange}
               required
             />
-          </div>
-
-          {/* Campos para seleccionar de listas */}
-          <div className="form-group">
-            <label htmlFor="id_proyecto_cup">Proyecto CUP:</label>
-            <select
-              id="id_proyecto_cup"
-              name="id_proyecto_cup"
-              value={newPedido.id_proyecto_cup}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">Seleccione un proyecto</option>
-              {proyectosCUP.map((proyecto) => (
-                <option key={proyecto.id} value={proyecto.id_proyecto_cup}>
-                  {proyecto.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="id_producto">Producto:</label>
-            <select
-              id="id_producto"
-              name="id_producto"
-              value={newPedido.id_producto}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">Seleccione un producto</option>
-              {productos.map((producto) => (
-                <option key={producto.id} value={producto.id_producto}>
-                  {producto.tipo}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="id_usuario">Usuario:</label>
-            <select
-              id="id_usuario"
-              name="id_usuario"
-              value={newPedido.id_usuario}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">Seleccione un usuario</option>
-              {usuarios.map((usuario) => (
-                <option key={usuario.id} value={usuario.id}>
-                  {usuario.nombre}
-                </option>
-              ))}
-            </select>
           </div>
 
           <div className="form-group">
@@ -316,7 +392,7 @@ const PedidoModal = ({ closeModal, addPedido }) => {
               onChange={handleInputChange}
               required
             >
-              <option value="">Seleccione un transporte</option>
+              <option value="">--Seleccione un transporte</option>
               {transportes.map((transporte) => (
                 <option key={transporte.id_transporte} value={transporte.id_transporte}>
                   {transporte.nombre}
@@ -325,25 +401,7 @@ const PedidoModal = ({ closeModal, addPedido }) => {
             </select>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="id_oficina">Oficina:</label>
-            <select
-              id="id_oficina"
-              name="id_oficina"
-              value={newPedido.id_oficina}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">Seleccione una oficina</option>
-              {oficinas.map((oficina) => (
-                <option key={oficina.id} value={oficina.id_oficina}>
-                  {oficina.especialidad}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="modal-footer">
+          <div className="modal-footer-pedido">
             <button type="button" onClick={closeModal} className="btn-cancelar">
               Cancelar
             </button>

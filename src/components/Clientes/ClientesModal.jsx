@@ -86,9 +86,9 @@ const ClientesModal = ({ closeModal, addCliente }) => {
               value={newClient.pais}
               onChange={handleInputChange}
             >
-              <option value="Peru">Perú</option>
+              <option value="Perú">Perú</option>
               <option value="Chile">Chile</option>
-              <option value="Panama">Panamá</option>
+              <option value="Panamá">Panamá</option>
             </select>
           </div>
           <div className="form-group">

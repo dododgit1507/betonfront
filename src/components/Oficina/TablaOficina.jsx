@@ -10,7 +10,7 @@ const TablaOficina = ({ oficinas, loading, error }) => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Tecnico</th>
+            <th>Técnico</th>
             <th>Especialidad</th>
           </tr>
         </thead>
