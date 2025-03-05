@@ -75,7 +75,8 @@ const ClientesModal = ({ closeModal, addCliente }) => {
               value={newClient.rol}
               onChange={handleInputChange}
             >
-              <option value="Cliente">Cliente</option>
+              <option value="CLIENTE">Cliente</option>
+              <option value="INGENIERO">Ingeniero</option>
             </select>
           </div>
           <div className="form-group">

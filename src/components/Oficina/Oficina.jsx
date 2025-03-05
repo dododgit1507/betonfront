@@ -1,40 +1,72 @@
 import React, { useState, useEffect } from 'react';
 import ModalOficina from './ModalOficina';
-import TablaOficina from './TablaOficina';
+import OficinaTableMUI from './OficinaTableMUI';
 import LoadingSpinner from '../common/LoadingSpinner';
+import { useToast, Button, Box } from '@chakra-ui/react';
 import './Oficina.css';
 
 const Oficina = () => {
+  const toast = useToast();
   const [oficinas, setOficinas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // Función para obtener las oficinas técnicas de la API
+  const showToast = () => {
+    toast({
+      title: 'Oficina registrada',
+      description: 'La oficina se ha registrado correctamente.',
+      status: 'success',
+      duration: 3000,
+      position: 'bottom-right',
+      isClosable: true,
+      containerStyle: {
+        marginBottom: '20px',
+      },
+    });
+  };
+
   const fetchOficinas = async () => {
     try {
       const response = await fetch('http://localhost:3000/oficina_tecnica');
       const data = await response.json();
-      
-      // Añadimos un retraso artificial para mostrar el spinner
-      setTimeout(() => {
-        setOficinas(data);
-        setLoading(false);
-      }, 2000);
+      setOficinas(data);
+      setLoading(false);
     } catch (err) {
-      setTimeout(() => {
-        setError('Error al cargar las oficinas técnicas.');
-        setLoading(false);
-      }, 2000);
+      setError('Error al cargar las oficinas técnicas.');
+      setLoading(false);
     }
   };
 
-  // Llamar a la API cuando el componente se monte
   useEffect(() => {
     fetchOficinas();
   }, []);
 
-  // Función para agregar una nueva oficina técnica y actualizar la tabla
+  const oficinasFiltradas = oficinas.filter(oficina =>
+    oficina.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const indexOfLastOficina = (page + 1) * rowsPerPage;
+  const indexOfFirstOficina = page * rowsPerPage;
+  const oficinasActuales = oficinasFiltradas.slice(indexOfFirstOficina, indexOfLastOficina);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    setPage(0);
+  };
+
   const addOficina = async (nuevaOficina) => {
     try {
       const response = await fetch('http://localhost:3000/registrar_oficina', {
@@ -44,9 +76,9 @@ const Oficina = () => {
       });
 
       if (response.ok) {
-        // Actualizamos la lista de oficinas
         await fetchOficinas();
-        setIsModalOpen(false); // Cerramos el modal
+        setIsModalOpen(false);
+        showToast();
       } else {
         console.error('Error al registrar la oficina técnica');
       }
@@ -56,18 +88,29 @@ const Oficina = () => {
   };
 
   return (
-    <div className="table-container">
-      <div className="table-header-oficina">
-        <h1>Oficina Técnica</h1>
-        <button className="btn-nuevo" onClick={() => setIsModalOpen(true)}>
+    <Box p={4}>
+      <div className='titulo-container'>
+        <h1 className='titulo-table'>Gestión de ㅤ  Oficinas</h1>
+        <Button className='boton-table' colorScheme="blue" onClick={() => setIsModalOpen(true)}>
           + Nueva Oficina
-        </button>
+        </Button>
       </div>
 
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <TablaOficina oficinas={oficinas} loading={loading} error={error} />
+        <OficinaTableMUI
+          oficinas={oficinasActuales}
+          loading={loading}
+          error={error}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          searchTerm={searchTerm}
+          onSearchChange={handleSearch}
+          totalOficinas={oficinasFiltradas.length}
+        />
       )}
 
       {isModalOpen && (
@@ -76,7 +119,7 @@ const Oficina = () => {
           addOficina={addOficina}
         />
       )}
-    </div>
+    </Box>
   );
 };
 

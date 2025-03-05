@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ClientesModal from './ClientesModal';
-import ClientesTabla from './ClientesTabla';
+import ClienteTableMUI from './ClienteTableMUI';
 import LoadingSpinner from '../common/LoadingSpinner';
-import { useToast } from '@chakra-ui/react'
+import { useToast, Button, Box } from '@chakra-ui/react';
 import './Clientes.css';
 
 const Clientes = () => {
@@ -11,10 +11,9 @@ const Clientes = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [clientesOrdenados, setClientesOrdenados] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
-  const clientesPorPagina = 10;
 
   const showToast = () => {
     toast({
@@ -28,59 +27,53 @@ const Clientes = () => {
         marginBottom: '20px',
       },
     });
-  }
+  };
 
-  // Función para obtener los clientes de la API
   const fetchClientes = async () => {
     try {
-      const response = await fetch('http://localhost:3000/usuario'); // Actualiza la URL si es necesario
+      const response = await fetch('http://localhost:3000/usuario');
       if (!response.ok) throw new Error('Error al obtener los datos.');
       
       const data = await response.json();
       const clientesOrdenados = [...data].sort((a, b) => 
         a.nombre.localeCompare(b.nombre)
       );
-      console.log('mostrando spinner');
-
-
-      setTimeout(() => {
-        setClientesOrdenados(clientesOrdenados);
-        setClientes(clientesOrdenados);
-        setLoading(false);
-      }, 1000);
-
+      
+      setClientes(clientesOrdenados);
+      setLoading(false);
     } catch (err) {
       setError('Error al cargar los clientes.');
       setLoading(false);
     }
   };
 
-  // Filtrar clientes basado en el término de búsqueda
+  useEffect(() => {
+    fetchClientes();
+  }, []);
+
   const clientesFiltrados = clientes.filter(cliente => 
     cliente.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
     cliente.telefono.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Calcular índices para la paginación
-  const indexOfLastCliente = currentPage * clientesPorPagina;
-  const indexOfFirstCliente = indexOfLastCliente - clientesPorPagina;
+  const indexOfLastCliente = (page + 1) * rowsPerPage;
+  const indexOfFirstCliente = page * rowsPerPage;
   const clientesActuales = clientesFiltrados.slice(indexOfFirstCliente, indexOfLastCliente);
 
-  // Cambiar de página
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  // Manejar cambios en la búsqueda
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-    setCurrentPage(1); // Resetear a la primera página cuando se busca
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  // Llamar a la API cuando el componente se monte
-  useEffect(() => {
-    fetchClientes();
-  }, []);
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
-  // Función para agregar un nuevo cliente y actualizar la tabla
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    setPage(0);
+  };
+
   const addCliente = async (nuevoCliente) => {
     try {
       const response = await fetch('http://localhost:3000/registrar_cliente', {
@@ -91,10 +84,8 @@ const Clientes = () => {
 
       if (!response.ok) throw new Error('Error al registrar el cliente');
       
-      await fetchClientes(); // Refrescar la lista de clientes
+      await fetchClientes();
       setIsModalOpen(false);
-
-      // Mostrar alerta de éxito usando SweetAlert2
       showToast();
     } catch (error) {
       console.error('Error en la solicitud:', error);
@@ -102,55 +93,38 @@ const Clientes = () => {
   };
 
   return (
-    <div className="table-container">
-      <div className="table-header">
-        <h1 className=''>Gestión de Clientes</h1>
-        <button className='btn-nuevo' onClick={() => setIsModalOpen(true)}>Agregar Cliente</button>
+    <Box p={4}>
+      <div className='titulo-container'>
+        <h1 className='titulo-table'>Gestión de Clientes</h1>
+        <Button className='boton-table' colorScheme="blue" onClick={() => setIsModalOpen(true)}>
+          + Agregar Cliente
+        </Button>
       </div>
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Buscar por nombre o teléfono..."
-          value={searchTerm}
-          onChange={handleSearch}
-          className="search-input"
-        />
-      </div>
-
-      
 
       {loading ? (
-          <LoadingSpinner />
-        ) : (
-          <ClientesTabla 
-            clientes={clientesActuales} 
-            loading={loading} 
-            error={error} 
-          />
-        )}
-
-      {!loading && !error && clientesFiltrados.length > 0 && (
-        <div className="paginacion">
-          {Array.from({ length: Math.ceil(clientesFiltrados.length / clientesPorPagina) }).map((_, index) => (
-            <button
-             id='page-button'
-              key={index + 1}
-              onClick={() => paginate(index + 1)}
-              className={currentPage === index + 1 ? 'active' : ''}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
+        <LoadingSpinner />
+      ) : (
+        <ClienteTableMUI
+          clientes={clientesActuales}
+          loading={loading}
+          error={error}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          searchTerm={searchTerm}
+          onSearchChange={handleSearch}
+          totalClientes={clientesFiltrados.length}
+        />
       )}
 
       {isModalOpen && (
         <ClientesModal
           closeModal={() => setIsModalOpen(false)}
-          addCliente={addCliente} 
+          addCliente={addCliente}
         />
       )}
-    </div>
+    </Box>
   );
 };
 

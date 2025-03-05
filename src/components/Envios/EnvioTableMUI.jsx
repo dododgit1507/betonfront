@@ -16,6 +16,7 @@ import {
   Select,
   MenuItem,
   FormControl,
+  InputLabel,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -107,8 +108,8 @@ const StyledSelect = styled(Select)(({ theme }) => ({
   },
 }));
 
-const PedidoTabla = ({ 
-  pedidos, 
+const EnvioTableMUI = ({ 
+  envios, 
   loading, 
   error,
   page,
@@ -117,7 +118,7 @@ const PedidoTabla = ({
   onRowsPerPageChange,
   searchTerm,
   onSearchChange,
-  totalPedidos,
+  totalEnvios,
   years,
   months,
   days,
@@ -126,11 +127,10 @@ const PedidoTabla = ({
   selectedDay,
   onYearChange,
   onMonthChange,
-  onDayChange,
-  onEditClick
+  onDayChange
 }) => {
   if (loading) {
-    return <Typography>Cargando pedidos...</Typography>;
+    return <Typography>Cargando envíos...</Typography>;
   }
 
   if (error) {
@@ -155,7 +155,7 @@ const PedidoTabla = ({
             displayEmpty
           >
             <MenuItem value="">Año</MenuItem>
-            {years?.map(year => (
+            {years.map(year => (
               <MenuItem key={year} value={year}>{year}</MenuItem>
             ))}
           </StyledSelect>
@@ -169,7 +169,7 @@ const PedidoTabla = ({
             disabled={!selectedYear}
           >
             <MenuItem value="">Mes</MenuItem>
-            {months?.map(month => (
+            {months.map(month => (
               <MenuItem key={month} value={month}>
                 {new Date(2000, month - 1).toLocaleString('es', { month: 'long' })}
               </MenuItem>
@@ -185,7 +185,7 @@ const PedidoTabla = ({
             disabled={!selectedMonth}
           >
             <MenuItem value="">Día</MenuItem>
-            {days?.map(day => (
+            {days.map(day => (
               <MenuItem key={day} value={day}>{day}</MenuItem>
             ))}
           </StyledSelect>
@@ -193,59 +193,32 @@ const PedidoTabla = ({
       </Box>
 
       <StyledTableContainer component={Paper}>
-        <Table stickyHeader aria-label="tabla de pedidos">
+        <Table stickyHeader aria-label="tabla de envíos">
           <StyledTableHead>
             <TableRow>
-              <TableCell style={{ minWidth: 150 }}>Proyecto</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Cod_pedido</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Tipo</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Programa</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Oficina</TableCell>
-              <TableCell style={{ minWidth: 150 }}>M2</TableCell>
-              <TableCell style={{ minWidth: 150 }}>ML</TableCell>
-              <TableCell style={{ minWidth: 150 }}>KG</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Frisos(ML)</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Chatas(KG)</TableCell> 
-              <TableCell style={{ minWidth: 150 }}>Fecha</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Hora</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Nivel</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Cod_Plano</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Planta</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Cliente</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Cup</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Suf</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Transporte</TableCell>
+              <TableCell style={{ minWidth: 150 }}>ID</TableCell>
+              <TableCell style={{ minWidth: 150 }}>Fecha Envío</TableCell>
+              <TableCell style={{ minWidth: 150 }}>Observación</TableCell>
+              <TableCell style={{ minWidth: 150 }}>Valoración</TableCell>
+              <TableCell style={{ minWidth: 200 }}>Facturado</TableCell>
+              <TableCell style={{ minWidth: 150 }}>Pagado</TableCell>
+              <TableCell style={{ minWidth: 150 }}>Codigo de Pedido</TableCell>
               <TableCell style={{ minWidth: 80 }}>Acciones</TableCell>
             </TableRow>
           </StyledTableHead>
           <TableBody>
-            {pedidos.length > 0 ? (
-              pedidos.map((pedido, index) => (
-                <StyledTableRow key={pedido.codigo_pedido || index}>
-                  <TableCell >{pedido.nombre_proyecto_cup}</TableCell>
-                  <TableCell>{pedido.codigo_pedido}</TableCell>
-                  <TableCell>{pedido.nombre_producto}</TableCell>
-                  <TableCell>{pedido.oficina_especialidad}</TableCell>
-                  <TableCell>{pedido.nombre_oficina}</TableCell>
-                  <TableCell>{pedido.m2}</TableCell>
-                  <TableCell>{pedido.ml}</TableCell>
-                  <TableCell>{pedido.kg}</TableCell>
-                  <TableCell>{pedido.frisos_ml}</TableCell>
-                  <TableCell>{pedido.chatas_kg}</TableCell>
-                  <TableCell>{new Date(pedido.fecha).toLocaleDateString()}</TableCell>
-                  <TableCell>{pedido.hora}</TableCell>
-                  <TableCell>{pedido.nivel}</TableCell>
-                  <TableCell>{pedido.codigo_plano}</TableCell>
-                  <TableCell>{pedido.planta}</TableCell>
-                  <TableCell>{pedido.nombre_usuario}</TableCell>
-                  <TableCell>{pedido.id_proyecto_cup}</TableCell>
-                  <TableCell>{pedido.suf}</TableCell>
-                  <TableCell>{pedido.nombre_transporte}</TableCell>
+            {envios.length > 0 ? (
+              envios.map((envio) => (
+                <StyledTableRow key={envio.id || envio.codigo_pedido}>
+                  <TableCell>{envio.id_envio}</TableCell>
+                  <TableCell>{new Date(envio.fecha_envio).toLocaleDateString()}</TableCell>
+                  <TableCell>{envio.observacion}</TableCell>
+                  <TableCell>{envio.valorizado}</TableCell>
+                  <TableCell>{envio.facturado}</TableCell>
+                  <TableCell>{envio.pagado}</TableCell>
+                  <TableCell>{envio.codigo_pedido}</TableCell>
                   <TableCell>
-                    <StyledIconButton 
-                      onClick={() => onEditClick(pedido)}
-                      size="small"
-                    >
+                    <StyledIconButton aria-label="editar envío">
                       <EditIcon />
                     </StyledIconButton>
                   </TableCell>
@@ -253,28 +226,34 @@ const PedidoTabla = ({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={20} align="center">
-                  No hay pedidos registrados
+                <TableCell colSpan={6} align="center">
+                  No hay envíos registrados
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
-        <TablePagination
-          component="div"
-          count={totalPedidos || 0}
-          page={page}
-          onPageChange={onPageChange}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={onRowsPerPageChange}
-          labelRowsPerPage="Filas por página"
-          labelDisplayedRows={({ from, to, count }) => 
-            `${from}-${to} de ${count !== -1 ? count : `más de ${to}`}`
-          }
-        />
       </StyledTableContainer>
+
+      <TablePagination
+        component="div"
+        count={totalEnvios}
+        page={page}
+        onPageChange={onPageChange}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={onRowsPerPageChange}
+        labelRowsPerPage="Filas por página"
+        labelDisplayedRows={({ from, to, count }) => 
+          `${from}-${to} de ${count !== -1 ? count : `más de ${to}`}`
+        }
+        sx={{
+          '.MuiTablePagination-select': {
+            paddingTop: '0.5rem',
+          }
+        }}
+      />
     </Box>
   );
 };
 
-export default PedidoTabla;
+export default EnvioTableMUI;

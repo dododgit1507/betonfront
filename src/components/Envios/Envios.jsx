@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import TablaEnvios from './TablaEnvios';
+import EnvioTableMUI from './EnvioTableMUI';
 import ModalEnvios from './ModalEnvios';
-import LoadingSpinner from '../common/LoadingSpinner'; // Asegúrate de que exista este componente
+import LoadingSpinner from '../common/LoadingSpinner';
+import { useToast, Button, Box } from '@chakra-ui/react';
 import './Envios.css';
-import { useToast } from '@chakra-ui/react'
 
 const Envios = () => {
-  const toast = useToast(); // Acceder al toast
+  const toast = useToast();
   const [envios, setEnvios] = useState([]);
-  const [loading, setLoading] = useState(true); // Estado de carga
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedDay, setSelectedDay] = useState('');
-  const enviosPorPagina = 15;
-
 
   const showToast = () => {
     toast({
@@ -31,24 +30,17 @@ const Envios = () => {
         marginBottom: '20px',
       },
     });
-  }
+  };
 
-  // Función para obtener los envíos de la API
   const fetchEnvios = async () => {
     try {
       const response = await fetch('http://localhost:3000/envio');
       const data = await response.json();
-      
-      // Añadimos un retraso artificial para mostrar el spinner
-      setTimeout(() => {
-        setEnvios(data);
-        setLoading(false); // Desactivamos el estado de carga
-      }, 1000);
+      setEnvios(data);
+      setLoading(false);
     } catch (err) {
-      setTimeout(() => {
-        setError('Error al cargar los envíos.');
-        setLoading(false);
-      }, 1000);
+      setError('Error al cargar los envíos.');
+      setLoading(false);
     }
   };
 
@@ -56,12 +48,10 @@ const Envios = () => {
     fetchEnvios();
   }, []);
 
-  // Obtener años únicos de los envíos
   const years = [...new Set(envios.map(envio => 
     new Date(envio.fecha_envio).getFullYear()
   ))].sort((a, b) => b - a);
 
-  // Obtener meses únicos del año seleccionado
   const months = selectedYear ? 
     [...new Set(envios
       .filter(envio => new Date(envio.fecha_envio).getFullYear() === parseInt(selectedYear))
@@ -69,7 +59,6 @@ const Envios = () => {
     )].sort((a, b) => a - b) 
     : [];
 
-  // Obtener días únicos del mes y año seleccionados
   const days = selectedYear && selectedMonth ?
     [...new Set(envios
       .filter(envio => {
@@ -81,7 +70,6 @@ const Envios = () => {
     )].sort((a, b) => a - b)
     : [];
 
-  // Filtrar envíos basado en búsqueda y fecha
   const enviosFiltrados = envios.filter(envio => {
     const cumpleBusqueda = envio.codigo_pedido.toLowerCase().includes(searchTerm.toLowerCase());
     
@@ -95,40 +83,42 @@ const Envios = () => {
     return cumpleBusqueda && cumpleYear && cumpleMes && cumpleDia;
   });
 
-  // Calcular índices para la paginación
-  const indexOfLastEnvio = currentPage * enviosPorPagina;
-  const indexOfFirstEnvio = indexOfLastEnvio - enviosPorPagina;
+  const indexOfLastEnvio = (page + 1) * rowsPerPage;
+  const indexOfFirstEnvio = page * rowsPerPage;
   const enviosActuales = enviosFiltrados.slice(indexOfFirstEnvio, indexOfLastEnvio);
 
-  // Cambiar de página
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  // Manejar cambios en la búsqueda
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-    setCurrentPage(1);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  // Manejar cambios en los filtros de fecha
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    setPage(0);
+  };
+
   const handleYearChange = (e) => {
     setSelectedYear(e.target.value);
     setSelectedMonth('');
     setSelectedDay('');
-    setCurrentPage(1);
+    setPage(0);
   };
 
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value);
     setSelectedDay('');
-    setCurrentPage(1);
+    setPage(0);
   };
 
   const handleDayChange = (e) => {
     setSelectedDay(e.target.value);
-    setCurrentPage(1);
+    setPage(0);
   };
 
-  // Función para agregar un nuevo envío y actualizar la tabla
   const addEnvio = async (nuevoEnvio) => {
     try {
       const response = await fetch('http://localhost:3000/registrar_envio', {
@@ -138,9 +128,8 @@ const Envios = () => {
       });
 
       if (response.ok) {
-        // Actualizamos la lista de envíos
         await fetchEnvios();
-        setIsModalOpen(false); // Cerramos el modal
+        setIsModalOpen(false);
         showToast();
       } else {
         console.error('Error al registrar el envío');
@@ -151,90 +140,38 @@ const Envios = () => {
   };
 
   return (
-    <div className="envios-container">
-      <div className="table-header">
-        <h1>Gestión de Envíos</h1>
-        <button className='btn-nuevo' onClick={() => setIsModalOpen(true)}>Agregar Envío</button>
+    <Box p={4}>
+      <div className='titulo-container'>
+        <h1 className='titulo-table'>Gestión de ㅤ  Envios</h1>
+        <Button className='boton-table' colorScheme="blue" onClick={() => setIsModalOpen(true)}>
+          + Agregar Envío
+        </Button>
       </div>
-      <div className="filters-container">
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Buscar por código de pedido..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="search-input"
-          />
-        </div>
-        
-        <div className="date-filters">
-          <select 
-            value={selectedYear} 
-            onChange={handleYearChange}
-            className="date-select"
-          >
-            <option value="">Año</option>
-            {years.map(year => (
-              <option key={year} value={year}>{year}</option>
-            ))}
-          </select>
-
-          <select 
-            value={selectedMonth} 
-            onChange={handleMonthChange}
-            className="date-select"
-            disabled={!selectedYear}
-          >
-            <option value="">Mes</option>
-            {months.map(month => (
-              <option key={month} value={month}>
-                {new Date(2000, month - 1).toLocaleString('es', { month: 'long' })}
-              </option>
-            ))}
-          </select>
-
-          <select 
-            value={selectedDay} 
-            onChange={handleDayChange}
-            className="date-select"
-            disabled={!selectedMonth}
-          >
-            <option value="">Día</option>
-            {days.map(day => (
-              <option key={day} value={day}>{day}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      
 
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <>
-          <TablaEnvios 
-            envios={enviosActuales} 
-            loading={loading} 
-            error={error} 
-          />
-
-          {/* Componente de paginación */}
-          {!loading && !error && enviosFiltrados.length > 0 && (
-            <div className="paginacion">
-              {Array.from({ length: Math.ceil(enviosFiltrados.length / enviosPorPagina) }).map((_, index) => (
-                <button
-                id='page-button'
-                  key={index + 1}
-                  onClick={() => paginate(index + 1)}
-                  className={currentPage === index + 1 ? 'active' : ''}
-                >
-                  {index + 1}
-                </button>
-              ))}
-            </div>
-          )}
-        </>
+        <EnvioTableMUI
+          envios={enviosActuales}
+          loading={loading}
+          error={error}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          searchTerm={searchTerm}
+          onSearchChange={handleSearch}
+          totalEnvios={enviosFiltrados.length}
+          years={years}
+          months={months}
+          days={days}
+          selectedYear={selectedYear}
+          selectedMonth={selectedMonth}
+          selectedDay={selectedDay}
+          onYearChange={handleYearChange}
+          onMonthChange={handleMonthChange}
+          onDayChange={handleDayChange}
+        />
       )}
 
       {isModalOpen && (
@@ -243,7 +180,7 @@ const Envios = () => {
           addEnvio={addEnvio}
         />
       )}
-    </div>
+    </Box>
   );
 };
 

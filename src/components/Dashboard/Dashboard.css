@@ -64,9 +64,10 @@
 
 /* Sidebar Styles */
 .sidebar {
-  width: 260px;
+  width: 280px;
+  min-width: 280px;
+  padding: 20px;
   background-color: #ededed;
-  padding: 24px;
   border-right: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
@@ -75,6 +76,18 @@
   position: sticky;
   top: 0;
   transition: transform 0.3s ease-in-out;
+}
+
+/* Main Content Styles */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: calc(100% - 280px);
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .logo {
@@ -139,16 +152,6 @@
 .menu-item span {
   font-size: 14px;
   font-weight: 500;
-}
-
-/* Main Content Styles */
-.main-content {
-  flex: 1;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  width: 100%;
 }
 
 /* Top Bar Styles */

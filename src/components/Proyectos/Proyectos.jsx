@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import ProyectosTabla from './ProyectoTabla';
+import ProyectoTableMUI from './ProyectoTableMUI';
 import ProyectosModal from './ProyectoModal';
 import LoadingSpinner from '../common/LoadingSpinner';
+import { useToast, Button, Box } from '@chakra-ui/react';
 import './Proyectos.css';
-import { useToast } from '@chakra-ui/react'
-
 
 const Proyectos = () => {
-  const toast = useToast(); // Acceder al toast
-
+  const toast = useToast();
   const [proyectos, setProyectos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
-  const proyectosPorPagina = 10;
 
   const showToast = () => {
     toast({
@@ -29,18 +27,14 @@ const Proyectos = () => {
         marginBottom: '20px',
       },
     });
-  }
+  };
 
-  // Función para obtener los proyectos de la API
   const fetchProyectos = async () => {
     try {
       const response = await fetch('http://localhost:3000/proyecto');
       const data = await response.json();
-
-      setTimeout(() => {
-        setProyectos(data);
-        setLoading(false);
-      }, 1000); // Retraso de 2 segundos
+      setProyectos(data);
+      setLoading(false);
     } catch (err) {
       setError('Error al cargar los proyectos.');
       setLoading(false);
@@ -51,27 +45,29 @@ const Proyectos = () => {
     fetchProyectos();
   }, []);
 
-  // Filtrar proyectos basado en el término de búsqueda
   const proyectosFiltrados = proyectos.filter(proyecto =>
     (proyecto.nombre && proyecto.nombre.toLowerCase().includes(searchTerm.toLowerCase())) ||
     (proyecto.id_proyecto_cup && proyecto.id_proyecto_cup.toLowerCase().includes(searchTerm.toLowerCase()))
   );
   
-  // Calcular índices para la paginación
-  const indexOfLastProyecto = currentPage * proyectosPorPagina;
-  const indexOfFirstProyecto = indexOfLastProyecto - proyectosPorPagina;
+  const indexOfLastProyecto = (page + 1) * rowsPerPage;
+  const indexOfFirstProyecto = page * rowsPerPage;
   const proyectosActuales = proyectosFiltrados.slice(indexOfFirstProyecto, indexOfLastProyecto);
 
-  // Cambiar de página
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  // Manejar cambios en la búsqueda
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-    setCurrentPage(1); // Resetear a la primera página cuando se busca
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  // Función para agregar un nuevo proyecto y actualizar la tabla
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    setPage(0);
+  };
+
   const addProyecto = async (nuevoProyecto) => {
     try {
       const response = await fetch('http://localhost:3000/registrar_proyecto', {
@@ -88,65 +84,37 @@ const Proyectos = () => {
   
       const proyectoCreado = await response.json();
       setIsModalOpen(false);
-  
-      // Recargar la lista completa de proyectos
       await fetchProyectos();
-
-      // Mostrar alerta de éxito con SweetAlert2
       showToast();
       
     } catch (err) {
       console.error('Error:', err);
-      // Mostrar alerta de error con SweetAlert2
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Hubo un problema al agregar el proyecto.',
-        confirmButtonText: 'Aceptar'
-      });
     }
   };
 
   return (
-    <div className="table-container">
-      <div className="table-header">
-        <h1>Gestión de Proyectos</h1>
-        <button className="btn-nuevo" onClick={() => setIsModalOpen(true)}>Agregar Proyecto</button>
+    <Box p={4}>
+      <div className='titulo-container'>
+        <h1 className='titulo-table'>Gestión de Proyectos</h1>
+        <Button className='boton-table' colorScheme="blue" onClick={() => setIsModalOpen(true)}>
+         + Agregar Proyecto
+        </Button>
       </div>
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Buscar por nombre o CUP..."
-          value={searchTerm}
-          onChange={handleSearch}
-          className="search-input"
-        />
-      </div>
-
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <ProyectosTabla
+        <ProyectoTableMUI
           proyectos={proyectosActuales}
           loading={loading}
           error={error}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          searchTerm={searchTerm}
+          onSearchChange={handleSearch}
+          totalProyectos={proyectosFiltrados.length}
         />
-      )}
-
-      {/* Componente de paginación */}
-      {!loading && !error && proyectosFiltrados.length > 0 && (
-        <div className="paginacion">
-          {Array.from({ length: Math.ceil(proyectosFiltrados.length / proyectosPorPagina) }).map((_, index) => (
-            <button
-              id='page-button'
-              key={index + 1}
-              onClick={() => paginate(index + 1)}
-              className={currentPage === index + 1 ? 'active' : ''}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
       )}
 
       {isModalOpen && (
@@ -155,7 +123,7 @@ const Proyectos = () => {
           addProyecto={addProyecto}
         />
       )}
-    </div>
+    </Box>
   );
 };
 

@@ -45,11 +45,11 @@ const ProyectosModal = ({ closeModal, addProyecto }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h1 className="modal-title">Nuevo Proyecto</h1>
-          <button onClick={closeModal} className="close-modal">
+    <div className="modal-overlay-proyecto">
+      <div className="modal-content-proyecto">
+        <div className="modal-header-proyecto">
+          <h1 className="modal-title-proyecto">Nuevo Proyecto</h1>
+          <button onClick={closeModal} className="close-modal-proyecto">
             &times;
           </button>
         </div>
@@ -57,7 +57,7 @@ const ProyectosModal = ({ closeModal, addProyecto }) => {
           
           <div className="form-group">
             <label htmlFor="id_proyecto_cup">CUP:</label>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div className='form-group-cup'>
               <input
                 type="text"
                 id="id_proyecto_cup"
@@ -84,7 +84,6 @@ const ProyectosModal = ({ closeModal, addProyecto }) => {
           </div>
           <div className="form-group">
             <label htmlFor="suf">SUF:</label>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
               <input
                 type="text"
                 id="suf"
@@ -92,7 +91,6 @@ const ProyectosModal = ({ closeModal, addProyecto }) => {
                 value={nuevoProyecto.suf}
                 readOnly
               />
-            </div>
           </div>
           <div className="form-actions">
             <button type="button" onClick={closeModal} className="btn-cancelar">

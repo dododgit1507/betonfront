@@ -3,7 +3,7 @@ import PedidosTabla from './PedidoTabla';
 import PedidosModal from './PedidoModal';
 import LoadingSpinner from '../common/LoadingSpinner';
 import './Pedidos.css';
-import { useToast } from '@chakra-ui/react'
+import { useToast, Button, Box } from '@chakra-ui/react';
 
 const Pedidos = () => {
   const toast = useToast();
@@ -20,6 +20,7 @@ const Pedidos = () => {
   const [productos, setProductos] = useState([]);
   const pedidosPorPagina = 15;
 
+
   const showToast = () => {
     toast({
       title: 'Pedido registrado',
@@ -32,43 +33,62 @@ const Pedidos = () => {
         marginBottom: '20px',
       },
     });
-  }
+  };
+
+  // Obtener el userId desde el token o de otro lugar donde lo almacenes
+  const userId = localStorage.getItem('userId'); 
+  const token = localStorage.getItem('token');
+  // Asegúrate de que el token o userId esté almacenado en localStorage
 
   // Función para obtener los pedidos de la API
   const fetchPedidos = async () => {
     try {
-      const response = await fetch('http://localhost:3000/pedidos');
+      const response = await fetch('http://localhost:3000/pedidos', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+  
       const data = await response.json();
-      setPedidos(data);
-
-      setTimeout(() => {
-        const productosUnicos = [...new Set(data.map(pedido => pedido.nombre_producto))];
-        setProductos(productosUnicos.sort());
-        
-        setLoading(false);
-      }, 1000);   
-
+      console.log("Todos los pedidos:", data);
+  
+      // Filtrar pedidos
+      const pedidosDelUsuario = data.filter(pedido => {
+        console.log("Comparando:", {
+          pedidoNombreUsuario: pedido.nombre_usuario,
+          localStorageUsername: localStorage.getItem('username')
+        });
+        return pedido.nombre_usuario.toLowerCase() === localStorage.getItem('username').toLowerCase();
+      });
+      
+      console.log("Pedidos del usuario:", pedidosDelUsuario);
+      
+      setPedidos(pedidosDelUsuario);
+      setProductos([...new Set(pedidosDelUsuario.map(p => p.nombre_producto))]);
+      setLoading(false);
     } catch (err) {
-      setError('Error al cargar los pedidos.');
+      console.error("Error al obtener pedidos:", err);
+      setError(err.message);
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchPedidos();
   }, []);
 
   // Obtener años únicos de los pedidos
-  const years = [...new Set(pedidos.map(pedido => 
+  const years = [...new Set(pedidos.map(pedido =>
     new Date(pedido.fecha).getFullYear()
   ))].sort((a, b) => b - a);
 
   // Obtener meses únicos del año seleccionado
-  const months = selectedYear ? 
+  const months = selectedYear ?
     [...new Set(pedidos
       .filter(pedido => new Date(pedido.fecha).getFullYear() === parseInt(selectedYear))
       .map(pedido => new Date(pedido.fecha).getMonth() + 1)
-    )].sort((a, b) => a - b) 
+    )].sort((a, b) => a - b)
     : [];
 
   // Obtener días únicos del mes y año seleccionados
@@ -76,8 +96,8 @@ const Pedidos = () => {
     [...new Set(pedidos
       .filter(pedido => {
         const fecha = new Date(pedido.fecha);
-        return fecha.getFullYear() === parseInt(selectedYear) && 
-               (fecha.getMonth() + 1) === parseInt(selectedMonth);
+        return fecha.getFullYear() === parseInt(selectedYear) &&
+          (fecha.getMonth() + 1) === parseInt(selectedMonth);
       })
       .map(pedido => new Date(pedido.fecha).getDate())
     )].sort((a, b) => a - b)
@@ -85,7 +105,7 @@ const Pedidos = () => {
 
   // Filtrar pedidos basado en búsqueda, fecha y producto
   const pedidosFiltrados = pedidos.filter(pedido => {
-    const searchMatch = 
+    const searchMatch =
       pedido.nombre_proyecto_cup.toLowerCase().includes(searchTerm.toLowerCase()) ||
       pedido.nombre_usuario.toLowerCase().includes(searchTerm.toLowerCase()) ||
       pedido.codigo_pedido.toLowerCase().includes(searchTerm.toLowerCase());
@@ -168,111 +188,30 @@ const Pedidos = () => {
   };
 
   return (
-    <div className="pedidos-container">
-      <div className="table-header">
-        <h1>Gestión de Pedidos</h1>
-        <button className='btn-nuevo' onClick={() => setIsModalOpen(true)}>Agregar Pedido</button>
+    <Box p={4}>
+      <div className="titulo-container">
+        <h1 className='titulo-table'>Gestión de Pedidos</h1>
+        <button className='boton-table' onClick={() => setIsModalOpen(true)}> + Agregar Pedido</button>
       </div>
-      <div className="filters-container">
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Buscar por nombre de proyecto, usuario o código de pedido..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="search-input"
-          />
-        </div>
-        
-        <div className="filters-row">
-          <div className="date-filters">
-            <select 
-              value={selectedYear} 
-              onChange={handleYearChange}
-              className="date-select"
-            >
-              <option value="">Año</option>
-              {years.map(year => (
-                <option key={year} value={year}>{year}</option>
-              ))}
-            </select>
-
-            <select 
-              value={selectedMonth} 
-              onChange={handleMonthChange}
-              className="date-select"
-              disabled={!selectedYear}
-            >
-              <option value="">Mes</option>
-              {months.map(month => (
-                <option key={month} value={month}>
-                  {new Date(2000, month - 1).toLocaleString('es', { month: 'long' })}
-                </option>
-              ))}
-            </select>
-
-            <select 
-              value={selectedDay} 
-              onChange={handleDayChange}
-              className="date-select"
-              disabled={!selectedMonth}
-            >
-              <option value="">Día</option>
-              {days.map(day => (
-                <option key={day} value={day}>{day}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="producto-filter">
-            <select
-              value={selectedProducto}
-              onChange={handleProductoChange}
-              className="producto-select"
-            >
-              <option value="">Tipo de Producto</option>
-              {productos.map(producto => (
-                <option key={producto} value={producto}>{producto}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </div>
-
-      
 
       {loading ? (
-        <LoadingSpinner/>
+        <LoadingSpinner />
       ) : (
-        <PedidosTabla 
-          pedidos={pedidosActuales} 
-          loading={loading} 
-          error={error} 
+        <PedidosTabla
+          pedidos={pedidosActuales}
+          pedidosPorPagina={pedidosPorPagina}
+          totalPedidos={pedidosFiltrados.length}
+          paginate={paginate}
+          currentPage={currentPage}
         />
       )}
 
-      {/* Componente de paginación */}
-      {!loading && !error && pedidosFiltrados.length > 0 && (
-        <div className="paginacion">
-          {Array.from({ length: Math.ceil(pedidosFiltrados.length / pedidosPorPagina) }).map((_, index) => (
-            <button
-              key={index + 1}
-              onClick={() => paginate(index + 1)}
-              className={currentPage === index + 1 ? 'active' : ''}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {isModalOpen && (
-        <PedidosModal
-          closeModal={() => setIsModalOpen(false)}
-          addPedido={addPedido}
-        />
-      )}
-    </div>
+      <PedidosModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        addPedido={addPedido}
+      />
+    </Box>
   );
 };
 

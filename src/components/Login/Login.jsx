@@ -9,32 +9,69 @@ const Login = () => {
   const toast = useToast(); // Instanciar el hook useToast
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
-
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Mostrar un estado de carga mientras se realiza la petición
-
+    setLoading(true);
+  
     try {
       const response = await fetch('http://localhost:3000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ correo: email, contraseña: password }),
       });
-
+  
       const data = await response.json();
-
+      
+      console.log('Respuesta completa del backend:', data); 
+  
       if (response.ok) {
-        // Redirigir al dashboard si el login es exitoso
-        navigate('/dashboard/pedidos');
+        const userId = data.id_usuario;
+        const userRole = data.rol;
+        const token = data.token;
+        const username = data.nombre;
+        
+        // Extraer nombre de usuario del correo (antes del @)
+
+        console.log('userId:', userId); 
+        console.log('userRole:', userRole);
+        console.log('token:', token);
+        console.log('username:', username);
+  
+        if (userId && userRole && token) {
+          // Almacenar información adicional
+          localStorage.setItem('userId', userId.toString());
+          localStorage.setItem('userRole', userRole);
+          localStorage.setItem('token', token);
+          localStorage.setItem('username', username);
+          localStorage.setItem('email', email);
+          
+          console.log('Datos almacenados en localStorage:', {
+            userId,
+            userRole,
+            username,
+            email
+          });
+  
+          navigate('/dashboard/pedidos');
+        } else {
+          console.error('Error: userId, userRole o token no están definidos');
+          toast({
+            title: 'Error de Autenticación',
+            description: 'Faltan datos de inicio de sesión.',
+            status: 'error',
+            duration: 3000,
+            position: 'bottom-right',
+            isClosable: true,
+          });
+        }
       } else {
-        // Mostrar mensaje de error con toast si hay algún problema con la autenticación
-        setError(data.message);
+        setError(data.message || 'Error en la autenticación');
         toast({
           title: 'Error',
           description: 'Correo o contraseña incorrectos.',
@@ -65,8 +102,7 @@ const Login = () => {
       setLoading(false);
     }
   };
-
-
+  
   return (
     <div className="login-container">
       <div className="login-left">
@@ -127,8 +163,8 @@ const Login = () => {
               <a href="#">¿Olvidaste tu contraseña?</a>
             </div>
 
-            <button type="submit" className="login-button">
-              Ingresar
+            <button type="submit" className="login-button" disabled={loading}>
+              {loading ? 'Cargando...' : 'Ingresar'}
             </button>
           </form>
         </div>

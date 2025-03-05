@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './PedidoModal.css';
 
-const PedidoModal = ({ closeModal, addPedido }) => {
+const PedidoModal = ({ isOpen, onClose, addPedido }) => {
+  if (!isOpen) {
+    return null; // Si el modal no está abierto, no lo renderizamos
+  }
   const [newPedido, setNewPedido] = useState({
     codigo_pedido: '',
     fecha: '',
@@ -134,7 +137,7 @@ const PedidoModal = ({ closeModal, addPedido }) => {
     e.preventDefault();
     console.log('Enviando al backend:', newPedido);
     addPedido(newPedido);
-    closeModal();
+    onClose();
   };
 
   const copiarCodigo = () => {
@@ -151,7 +154,7 @@ const PedidoModal = ({ closeModal, addPedido }) => {
       <div className="modal-content-pedido">
         <div className="modal-header">
           <h1 className='modaltitle'>Nuevo Pedido</h1>
-          <button onClick={closeModal} className="close-modal">
+          <button onClick={onClose} className="close-modal">
             &times;
           </button>
         </div>
@@ -190,7 +193,7 @@ const PedidoModal = ({ closeModal, addPedido }) => {
             >
               <option value="">--Seleccione un proyecto</option>
               {proyectosCUP.map((proyecto) => (
-                <option key={proyecto.id} value={proyecto.id_proyecto_cup}>
+                <option key={proyecto.id_proyecto_cup} value={proyecto.id_proyecto_cup}>
                   {proyecto.nombre}
                 </option>
               ))}
@@ -226,7 +229,7 @@ const PedidoModal = ({ closeModal, addPedido }) => {
             >
               <option value="">--Seleccione un producto</option>
               {productos.map((producto) => (
-                <option key={producto.id} value={producto.id_producto}>
+                <option key={producto.id_producto} value={producto.id_producto}>
                   {producto.tipo}
                 </option>
               ))}
@@ -402,7 +405,7 @@ const PedidoModal = ({ closeModal, addPedido }) => {
           </div>
 
           <div className="modal-footer-pedido">
-            <button type="button" onClick={closeModal} className="btn-cancelar">
+            <button type="button" onClick={onClose} className="btn-cancelar">
               Cancelar
             </button>
             <button type="submit" className="btn-guardar">Guardar</button>  
