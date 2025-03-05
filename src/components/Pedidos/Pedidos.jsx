@@ -35,45 +35,51 @@ const Pedidos = () => {
     });
   };
 
-  // Obtener el userId desde el token o de otro lugar donde lo almacenes
-  const userId = localStorage.getItem('userId'); 
+  // Obtener el userId y userRole desde el localStorage
+  const userId = localStorage.getItem('userId');
+  const userRole = localStorage.getItem('userRole');
   const token = localStorage.getItem('token');
-  // Asegúrate de que el token o userId esté almacenado en localStorage
 
-  // Función para obtener los pedidos de la API
   const fetchPedidos = async () => {
     try {
       const response = await fetch('http://localhost:3000/pedidos', {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
       });
-  
+
       const data = await response.json();
-      console.log("Todos los pedidos:", data);
-  
-      // Filtrar pedidos
-      const pedidosDelUsuario = data.filter(pedido => {
-        console.log("Comparando:", {
-          pedidoNombreUsuario: pedido.nombre_usuario,
-          localStorageUsername: localStorage.getItem('username')
+      console.log('Todos los pedidos:', data);
+
+      let pedidosFiltrados;
+      if (userRole === 'ADMIN' || userRole === 'INGENIERO') {
+        pedidosFiltrados = data;
+      } else {
+        pedidosFiltrados = data.filter(pedido => {
+          console.log('Comparando:', {
+            pedidoNombreUsuario: pedido.nombre_usuario,
+            localStorageUsername: localStorage.getItem('username'),
+          });
+          return (
+            pedido.nombre_usuario.toLowerCase() ===
+            localStorage.getItem('username').toLowerCase()
+          );
         });
-        return pedido.nombre_usuario.toLowerCase() === localStorage.getItem('username').toLowerCase();
-      });
-      
-      console.log("Pedidos del usuario:", pedidosDelUsuario);
-      
-      setPedidos(pedidosDelUsuario);
-      setProductos([...new Set(pedidosDelUsuario.map(p => p.nombre_producto))]);
+      }
+
+      console.log('Pedidos mostrados:', pedidosFiltrados);
+      setPedidos(pedidosFiltrados);
+      setProductos([...new Set(pedidosFiltrados.map(p => p.nombre_producto))]);
       setLoading(false);
     } catch (err) {
-      console.error("Error al obtener pedidos:", err);
+      console.error('Error al obtener pedidos:', err);
       setError(err.message);
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchPedidos();
   }, []);

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, Calendar, ChartBar, Computer, Gift, HelpCircle, Home, LogOut, Menu, Settings, Users, X } from 'lucide-react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import './Dashboard.css';
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Extraer el rol del localStorage
   const [rol, setRol] = useState(null);
@@ -18,6 +19,13 @@ const Dashboard = () => {
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleLogout = () => {
+    // Eliminar todas las credenciales del localStorage
+    localStorage.clear(); // Esto elimina todo lo almacenado en el localStorage
+    // Redirigir al usuario a la página de inicio de sesión
+    navigate('/'); // O a la ruta donde esté tu página de inicio de sesión
   };
 
   return (
@@ -52,8 +60,42 @@ const Dashboard = () => {
                 </li>
               )}
 
-              {/* Mostrar más opciones para otros roles, como 'admin' */}
-              {rol === 'Admin' && (
+              {rol === 'INGENIERO'  && (
+                <>
+                  <li>
+                    <NavLink to="/dashboard/pedidos" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
+                      <Home size={20} />
+                      <span>Pedidos</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dashboard/proyectos" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
+                      <Calendar size={20} />
+                      <span>Proyectos</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dashboard/envios" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
+                      <ChartBar size={20} />
+                      <span>Envíos</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dashboard/clientes" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
+                      <Users size={20} />
+                      <span>Clientes</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dashboard/oficina" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
+                      <Computer size={20} />
+                      <span>Oficina Técnica</span>
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {rol === 'ADMIN'  && (
                 <>
                   <li>
                     <NavLink to="/dashboard/pedidos" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
@@ -100,10 +142,10 @@ const Dashboard = () => {
             <h3 className="menu-title">GENERAL</h3>
             <ul>
               <li>
-                <NavLink to="/" className="menu-item">
+                <button className="menu-item" onClick={handleLogout}>
                   <LogOut size={20} />
                   <span>Logout</span>
-                </NavLink>
+                </button>
               </li>
             </ul>
           </div>

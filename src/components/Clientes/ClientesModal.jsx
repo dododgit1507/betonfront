@@ -77,6 +77,7 @@ const ClientesModal = ({ closeModal, addCliente }) => {
             >
               <option value="CLIENTE">Cliente</option>
               <option value="INGENIERO">Ingeniero</option>
+              <option value="ADMIN">Admin</option>
             </select>
           </div>
           <div className="form-group">
