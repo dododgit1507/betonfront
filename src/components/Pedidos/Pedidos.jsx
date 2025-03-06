@@ -5,6 +5,7 @@ import LoadingSpinner from '../common/LoadingSpinner';
 import './Pedidos.css';
 import { useToast, Button, Box } from '@chakra-ui/react';
 
+
 const Pedidos = () => {
   const toast = useToast();
   const [pedidos, setPedidos] = useState([]);
@@ -19,6 +20,8 @@ const Pedidos = () => {
   const [selectedProducto, setSelectedProducto] = useState('');
   const [productos, setProductos] = useState([]);
   const pedidosPorPagina = 15;
+
+  const username = localStorage.getItem('username'); //
 
 
   const showToast = () => {
@@ -35,7 +38,19 @@ const Pedidos = () => {
     });
   };
 
-  // Obtener el userId y userRole desde el localStorage
+  useEffect(() => {
+    toast({
+      title: `Bienvenido a Betondecken, ${username}`,
+      status: 'info',
+      duration: 3000,
+      position: 'bottom-right',
+      isClosable: true,
+      containerStyle: {
+        marginBottom: '20px',
+      },
+    });
+  }, [toast, username]);
+
   const userId = localStorage.getItem('userId');
   const userRole = localStorage.getItem('userRole');
   const token = localStorage.getItem('token');
@@ -49,32 +64,26 @@ const Pedidos = () => {
           'Content-Type': 'application/json',
         },
       });
-
+  
       const data = await response.json();
-      console.log('Todos los pedidos:', data);
-
+      if (!Array.isArray(data)) {
+        throw new Error('La respuesta no es un array');
+      }
+  
       let pedidosFiltrados;
       if (userRole === 'ADMIN' || userRole === 'INGENIERO') {
         pedidosFiltrados = data;
       } else {
-        pedidosFiltrados = data.filter(pedido => {
-          console.log('Comparando:', {
-            pedidoNombreUsuario: pedido.nombre_usuario,
-            localStorageUsername: localStorage.getItem('username'),
-          });
-          return (
-            pedido.nombre_usuario.toLowerCase() ===
-            localStorage.getItem('username').toLowerCase()
-          );
-        });
+        pedidosFiltrados = data.filter(pedido =>
+          pedido.nombre_usuario.toLowerCase() ===
+          localStorage.getItem('username').toLowerCase()
+        );
       }
-
-      console.log('Pedidos mostrados:', pedidosFiltrados);
+  
       setPedidos(pedidosFiltrados);
       setProductos([...new Set(pedidosFiltrados.map(p => p.nombre_producto))]);
       setLoading(false);
     } catch (err) {
-      console.error('Error al obtener pedidos:', err);
       setError(err.message);
       setLoading(false);
     }
@@ -82,6 +91,8 @@ const Pedidos = () => {
 
   useEffect(() => {
     fetchPedidos();
+    const interval = setInterval(fetchPedidos, 1000); // Actualiza cada 5 segundos
+    return () => clearInterval(interval); // Limpia el intervalo cuando el componente se desmonta
   }, []);
 
   // Obtener años únicos de los pedidos
@@ -109,7 +120,6 @@ const Pedidos = () => {
     )].sort((a, b) => a - b)
     : [];
 
-  // Filtrar pedidos basado en búsqueda, fecha y producto
   const pedidosFiltrados = pedidos.filter(pedido => {
     const searchMatch =
       pedido.nombre_proyecto_cup.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -132,21 +142,17 @@ const Pedidos = () => {
     return cumpleYear && cumpleMes && cumpleDia;
   });
 
-  // Calcular índices para la paginación
   const indexOfLastPedido = currentPage * pedidosPorPagina;
   const indexOfFirstPedido = indexOfLastPedido - pedidosPorPagina;
   const pedidosActuales = pedidosFiltrados.slice(indexOfFirstPedido, indexOfLastPedido);
 
-  // Cambiar de página
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Manejar cambios en la búsqueda
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
     setCurrentPage(1);
   };
 
-  // Manejar cambios en los filtros de fecha
   const handleYearChange = (e) => {
     setSelectedYear(e.target.value);
     setSelectedMonth('');
@@ -165,13 +171,11 @@ const Pedidos = () => {
     setCurrentPage(1);
   };
 
-  // Manejar cambio de producto
   const handleProductoChange = (e) => {
     setSelectedProducto(e.target.value);
     setCurrentPage(1);
   };
 
-  // Función para agregar un nuevo pedido y actualizar la tabla
   const addPedido = async (nuevoPedido) => {
     try {
       const response = await fetch('http://localhost:3000/registrar_pedido', {
@@ -181,7 +185,6 @@ const Pedidos = () => {
       });
 
       if (response.ok) {
-        // Si el pedido se agrega correctamente, obtenemos la lista actualizada
         await fetchPedidos(); // Llamamos a la API nuevamente para obtener los pedidos actualizados
         setIsModalOpen(false);
         showToast(); // Cerramos el modal

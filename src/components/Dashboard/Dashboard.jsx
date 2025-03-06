@@ -5,6 +5,7 @@ import './Dashboard.css';
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [username, setUsername] = useState(''); // Estado para almacenar el username
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -15,6 +16,12 @@ const Dashboard = () => {
     // Obtener el rol desde el localStorage
     const storedRol = localStorage.getItem('userRole');
     setRol(storedRol);
+
+    // Obtener el username desde el localStorage
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername); // Actualizar el estado con el username
+    }
   }, []);
 
   const toggleSidebar = () => {
@@ -161,7 +168,7 @@ const Dashboard = () => {
                     className="profile-image" 
                   />
                   <div className="profile-details">
-                    <span className="profile-name">Jair Admin</span>
+                    <span className="profile-name">{username || 'Admin'}</span> {/* Mostrar el username obtenido */}
                   </div>
                 </div>
               </li>

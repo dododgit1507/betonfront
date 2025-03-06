@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -18,6 +18,7 @@ import {
   FormControl,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import ModalEditar from './ModalEditar'; // Importa el modal aquí
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -43,14 +44,13 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
     color: '#F0F1F1',
     fontWeight: '600',
     fontSize: '0.95rem',
-    whiteSpace: 'nowrap',  
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    padding: '16px 24px',  
-    position: 'sticky',    
-    top: 0,
-    zIndex: 1,
-  }
+    padding: '16px',
+    whiteSpace: 'nowrap',
+    '@media (max-width: 600px)': {
+      fontSize: '0.85rem',
+      padding: '8px 4px',
+    },
+  },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -61,11 +61,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
   },
   '& .MuiTableCell-root': {
-    padding: '12px 24px',  
-    whiteSpace: 'nowrap',  
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  }
+    padding: '12px 16px',
+    '@media (max-width: 600px)': {
+      padding: '8px 4px',
+      fontSize: '0.85rem',
+    },
+  },
 }));
 
 const StyledSearchField = styled(TextField)(({ theme }) => ({
@@ -81,18 +82,18 @@ const StyledSearchField = styled(TextField)(({ theme }) => ({
     '&.Mui-focused fieldset': {
       borderColor: theme.palette.primary.main,
       borderWidth: '2px',
-    }
+    },
   },
   '& .MuiInputBase-input': {
     padding: '12px 14px',
-  }
+  },
 }));
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: 'blue',
   '&:hover': {
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
-  }
+  },
 }));
 
 const StyledSelect = styled(Select)(({ theme }) => ({
@@ -104,9 +105,9 @@ const StyledSelect = styled(Select)(({ theme }) => ({
   },
 }));
 
-const PedidoTabla = ({ 
-  pedidos, 
-  loading, 
+const PedidoTabla = ({
+  pedidos,
+  loading,
   error,
   page,
   rowsPerPage,
@@ -124,8 +125,10 @@ const PedidoTabla = ({
   onYearChange,
   onMonthChange,
   onDayChange,
-  onEditClick
 }) => {
+  const [openModal, setOpenModal] = useState(false);
+  const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
+
   if (loading) {
     return <Typography>Cargando pedidos...</Typography>;
   }
@@ -133,6 +136,22 @@ const PedidoTabla = ({
   if (error) {
     return <Typography color="error">{error}</Typography>;
   }
+
+  const handleEditClick = (pedido) => {
+    setPedidoSeleccionado(pedido);
+    setOpenModal(true);
+  };
+
+  const handleModalClose = () => {
+    setOpenModal(false);
+    setPedidoSeleccionado(null);
+  };
+
+  const handleGuardarPedido = (pedidoActualizado) => {
+    console.log('Pedido actualizado:', pedidoActualizado);
+    // Aquí puedes agregar la lógica para actualizar el pedido en tu backend o estado global
+    setOpenModal(false);
+  };
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -146,14 +165,12 @@ const PedidoTabla = ({
           size="small"
         />
         <FormControl size="small">
-          <StyledSelect
-            value={selectedYear}
-            onChange={onYearChange}
-            displayEmpty
-          >
+          <StyledSelect value={selectedYear} onChange={onYearChange} displayEmpty>
             <MenuItem value="">Año</MenuItem>
-            {years?.map(year => (
-              <MenuItem key={year} value={year}>{year}</MenuItem>
+            {years?.map((year) => (
+              <MenuItem key={year} value={year}>
+                {year}
+              </MenuItem>
             ))}
           </StyledSelect>
         </FormControl>
@@ -166,7 +183,7 @@ const PedidoTabla = ({
             disabled={!selectedYear}
           >
             <MenuItem value="">Mes</MenuItem>
-            {months?.map(month => (
+            {months?.map((month) => (
               <MenuItem key={month} value={month}>
                 {new Date(2000, month - 1).toLocaleString('es', { month: 'long' })}
               </MenuItem>
@@ -182,8 +199,10 @@ const PedidoTabla = ({
             disabled={!selectedMonth}
           >
             <MenuItem value="">Día</MenuItem>
-            {days?.map(day => (
-              <MenuItem key={day} value={day}>{day}</MenuItem>
+            {days?.map((day) => (
+              <MenuItem key={day} value={day}>
+                {day}
+              </MenuItem>
             ))}
           </StyledSelect>
         </FormControl>
@@ -193,7 +212,7 @@ const PedidoTabla = ({
         <Table stickyHeader aria-label="tabla de pedidos">
           <StyledTableHead>
             <TableRow>
-              <TableCell style={{ minWidth: 150 }}>Proyecto</TableCell>
+            <TableCell style={{ minWidth: 150 }}>Proyecto</TableCell>
               <TableCell style={{ minWidth: 150 }}>Código</TableCell>
               <TableCell style={{ minWidth: 100 }}>Tipo</TableCell>
               <TableCell style={{ minWidth: 120 }}>Programa</TableCell>
@@ -219,7 +238,7 @@ const PedidoTabla = ({
             {pedidos.length > 0 ? (
               pedidos.map((pedido, index) => (
                 <StyledTableRow key={pedido.codigo_pedido || index}>
-                  <TableCell >{pedido.nombre_proyecto_cup}</TableCell>
+                  <TableCell>{pedido.nombre_proyecto_cup}</TableCell>
                   <TableCell>{pedido.codigo_pedido}</TableCell>
                   <TableCell>{pedido.nombre_producto}</TableCell>
                   <TableCell>{pedido.oficina_especialidad}</TableCell>
@@ -239,10 +258,7 @@ const PedidoTabla = ({
                   <TableCell>{pedido.suf}</TableCell>
                   <TableCell>{pedido.nombre_transporte}</TableCell>
                   <TableCell>
-                    <StyledIconButton 
-                      onClick={() => onEditClick(pedido)}
-                      size="small"
-                    >
+                    <StyledIconButton onClick={() => handleEditClick(pedido)}>
                       <EditIcon />
                     </StyledIconButton>
                   </TableCell>
@@ -250,26 +266,32 @@ const PedidoTabla = ({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={20} align="center">
-                  No hay pedidos registrados
-                </TableCell>
+                <TableCell colSpan={6}>No se encontraron pedidos.</TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
-        <TablePagination
-          component="div"
-          count={totalPedidos || 0}
-          page={page}
-          onPageChange={onPageChange}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={onRowsPerPageChange}
-          labelRowsPerPage="Filas por página"
-          labelDisplayedRows={({ from, to, count }) => 
-            `${from}-${to} de ${count !== -1 ? count : `más de ${to}`}`
-          }
-        />
       </StyledTableContainer>
+
+      <TablePagination
+        component="div"
+        count={totalPedidos}
+        page={page}
+        onPageChange={onPageChange}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={onRowsPerPageChange}
+        labelRowsPerPage="Filas por página"
+        labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+      />
+
+      {openModal && (
+        <ModalEditar
+          open={openModal}
+          onClose={handleModalClose}
+          pedido={pedidoSeleccionado}
+          onSave={handleGuardarPedido}
+        />
+      )}
     </Box>
   );
 };
