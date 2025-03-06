@@ -24,20 +24,17 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   borderRadius: '10px',
   overflow: 'auto',
   maxWidth: '100%',
+  maxHeight: 'calc(100vh - 300px)', 
   '& table': {
-    tableLayout: 'fixed',
+    minWidth: '1200px', 
   },
-  '@media (max-width: 600px)': {
-    '& table': {
-      '& th, & td': {
-        minWidth: '150px',
-        padding: '8px 16px',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
-      },
-    },
-  },
+  '& .MuiTableCell-root': {
+    whiteSpace: 'nowrap',  
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    maxWidth: '200px',     
+    padding: '16px 24px',  
+  }
 }));
 
 const StyledTableHead = styled(TableHead)(({ theme }) => ({
@@ -46,12 +43,13 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
     color: '#F0F1F1',
     fontWeight: '600',
     fontSize: '0.95rem',
-    padding: '16px',
-    whiteSpace: 'nowrap',
-    '@media (max-width: 600px)': {
-      fontSize: '0.85rem',
-      padding: '8px 4px',
-    },
+    whiteSpace: 'nowrap',  
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    padding: '16px 24px',  
+    position: 'sticky',    
+    top: 0,
+    zIndex: 1,
   }
 }));
 
@@ -63,11 +61,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
   },
   '& .MuiTableCell-root': {
-    padding: '12px 16px',
-    '@media (max-width: 600px)': {
-      padding: '8px 4px',
-      fontSize: '0.85rem',
-    },
+    padding: '12px 24px',  
+    whiteSpace: 'nowrap',  
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   }
 }));
 
@@ -197,25 +194,25 @@ const PedidoTabla = ({
           <StyledTableHead>
             <TableRow>
               <TableCell style={{ minWidth: 150 }}>Proyecto</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Cod_pedido</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Tipo</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Programa</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Oficina</TableCell>
-              <TableCell style={{ minWidth: 150 }}>M2</TableCell>
-              <TableCell style={{ minWidth: 150 }}>ML</TableCell>
-              <TableCell style={{ minWidth: 150 }}>KG</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Frisos(ML)</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Chatas(KG)</TableCell> 
-              <TableCell style={{ minWidth: 150 }}>Fecha</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Hora</TableCell>
+              <TableCell style={{ minWidth: 150 }}>Código</TableCell>
+              <TableCell style={{ minWidth: 100 }}>Tipo</TableCell>
+              <TableCell style={{ minWidth: 120 }}>Programa</TableCell>
+              <TableCell style={{ minWidth: 150 }}>Oficina Técnica</TableCell>
+              <TableCell style={{ minWidth: 100 }}>M2</TableCell>
+              <TableCell style={{ minWidth: 100 }}>ML</TableCell>
+              <TableCell style={{ minWidth: 100 }}>KG</TableCell>
+              <TableCell style={{ minWidth: 100 }}>Frisos(ML)</TableCell>
+              <TableCell style={{ minWidth: 100 }}>Chatas(KG)</TableCell>
+              <TableCell style={{ minWidth: 120 }}>Fecha</TableCell>
+              <TableCell style={{ minWidth: 120 }}>Hora</TableCell>
               <TableCell style={{ minWidth: 150 }}>Nivel</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Cod_Plano</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Planta</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Cliente</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Cup</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Suf</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Transporte</TableCell>
-              <TableCell style={{ minWidth: 80 }}>Acciones</TableCell>
+              <TableCell style={{ minWidth: 100 }}>Codigo Plano PL</TableCell>
+              <TableCell style={{ minWidth: 100 }}>Planta</TableCell>
+              <TableCell style={{ minWidth: 120 }}>Cliente</TableCell>
+              <TableCell style={{ minWidth: 100 }}>CUP</TableCell>
+              <TableCell style={{ minWidth: 100 }}>SUF</TableCell>
+              <TableCell style={{ minWidth: 100 }}>Transporte</TableCell>
+              <TableCell style={{ minWidth: 100 }}>Acciones</TableCell>
             </TableRow>
           </StyledTableHead>
           <TableBody>

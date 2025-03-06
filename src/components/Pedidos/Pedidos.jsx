@@ -205,10 +205,27 @@ const Pedidos = () => {
       ) : (
         <PedidosTabla
           pedidos={pedidosActuales}
-          pedidosPorPagina={pedidosPorPagina}
+          loading={loading}
+          error={error}
+          page={currentPage - 1}
+          rowsPerPage={pedidosPorPagina}
+          onPageChange={(event, newPage) => setCurrentPage(newPage + 1)}
+          onRowsPerPageChange={(event) => {
+            setPedidosPorPagina(parseInt(event.target.value, 10));
+            setCurrentPage(1);
+          }}
+          searchTerm={searchTerm}
+          onSearchChange={handleSearch}
           totalPedidos={pedidosFiltrados.length}
-          paginate={paginate}
-          currentPage={currentPage}
+          years={years}
+          months={months}
+          days={days}
+          selectedYear={selectedYear}
+          selectedMonth={selectedMonth}
+          selectedDay={selectedDay}
+          onYearChange={handleYearChange}
+          onMonthChange={handleMonthChange}
+          onDayChange={handleDayChange}
         />
       )}
 
