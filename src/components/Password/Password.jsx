@@ -3,6 +3,7 @@ import './Password.css';
 
 const Password = () => {
   const [password, setPassword] = useState('');
+  const [usuarioId] = useState(1); // ID del usuario (puedes cambiarlo según sea necesario)
 
   const generatePassword = () => {
     const length = 12;
@@ -15,6 +16,35 @@ const Password = () => {
     }
     
     setPassword(newPassword);
+
+    // Enviar el código generado al backend
+    sendPasswordToBackend(newPassword, usuarioId);
+  };
+
+  const sendPasswordToBackend = async (newPassword, userId) => {
+    try {
+      const response = await fetch('http://localhost:3000/codigo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          codigo: newPassword,
+          usuarioId: userId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al enviar el código');
+      }
+
+      const result = await response.json();
+      console.log('Código guardado:', result);
+      alert('Contraseña generada y guardada en la base de datos');
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Hubo un error al guardar la contraseña');
+    }
   };
 
   const copyToClipboard = () => {
