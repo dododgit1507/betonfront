@@ -9,6 +9,11 @@ import {
   Box,
   Modal,
 } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+
 
 const ModalEditar = ({ open, onClose, pedido, onSave }) => {
   // Función para convertir la fecha al formato 'YYYY-MM-DD'
@@ -47,6 +52,16 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
   const [disableDate, setDisableDate] = useState(false);
   const [modalCodigoOpen, setModalCodigoOpen] = useState(false);
   const [codigoValidacion, setCodigoValidacion] = useState('');
+
+  const getCurrentDate = () => {
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // Los meses empiezan desde 0
+  const year = today.getFullYear();
+  
+  return `${year}-${month}-${day}`;
+};
+
 
   useEffect(() => {
     const storedUserRole = localStorage.getItem('userRole');
@@ -117,7 +132,6 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
         usuarioId: userId, // Usar el ID del usuario almacenado
       };
   
-      // Agregar console.log para verificar los datos que se enviarán al backend
       console.log('Datos enviados al backend:', data);
   
       const response = await fetch('http://localhost:3000/verificar_codigo', {
@@ -142,9 +156,13 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
       alert('Hubo un error al validar el código. Inténtalo de nuevo más tarde.');
     }
   };
-  
-  
-  
+
+  // Función para deshabilitar fechas anteriores al día actual
+  const disablePastDates = () => {
+    const today = new Date().toISOString().split('T')[0];
+    return today;
+  };
+
   return (
     <>
       <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
@@ -232,21 +250,34 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
               disabled={userRole === 'Cliente'}
             />
             <Box display="flex" alignItems="center">
-              <TextField
-                name="fecha"
-                label="Fecha"
-                type="date"
-                value={formValues.fecha}
-                onChange={handleInputChange}
-                fullWidth
-                disabled={disableDate}
-                onClick={handleFechaClick} // Abrir el modal para el código de validación
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Fecha"
+                  value={formValues.fecha ? dayjs(formValues.fecha) : null}
+                  onChange={(newValue) => {
+                    handleInputChange({
+                      target: {
+                        name: 'fecha',
+                        value: newValue ? newValue.format('YYYY-MM-DD') : ''
+                      }
+                    });
+                  }}
+                  disabled={disableDate}
+                  disablePast
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      onClick: handleFechaClick
+                    }
+                  }}
+                />
+              </LocalizationProvider>
               {userRole !== 'Cliente' && (
-                <Button variant="contained" onClick={handleFechaClick} style={{ marginLeft: '10px' }}>
+                <Button
+                  variant="contained"
+                  onClick={handleFechaClick}
+                  style={{ marginLeft: '10px' }}
+                >
                   Verificar
                 </Button>
               )}
@@ -273,7 +304,7 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
             />
             <TextField
               name="codigo_plano"
-              label="Codigo Plano PL"
+              label="Plano"
               value={formValues.codigo_plano}
               onChange={handleInputChange}
               fullWidth
@@ -289,19 +320,19 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
             />
             <TextField
               name="nombre_usuario"
-              label="Cliente"
+              label="Usuario"
               value={formValues.nombre_usuario}
               onChange={handleInputChange}
               fullWidth
-              disabled={userRole === 'Cliente'}
+              disabled
             />
             <TextField
               name="id_proyecto_cup"
-              label="ID CUP"
+              label="ID Proyecto"
               value={formValues.id_proyecto_cup}
               onChange={handleInputChange}
               fullWidth
-              disabled={userRole === 'Cliente'}
+              disabled
             />
             <TextField
               name="suf"
@@ -309,11 +340,11 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
               value={formValues.suf}
               onChange={handleInputChange}
               fullWidth
-              disabled={userRole === 'Cliente'}
+              disabled
             />
             <TextField
               name="nombre_transporte"
-              label="Nombre Transporte"
+              label="Transporte"
               value={formValues.nombre_transporte}
               onChange={handleInputChange}
               fullWidth
@@ -322,37 +353,42 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <button className="btn-cancelar" onClick={onClose}>Cancelar</button>
-          <button className="btn-guardar" onClick={handleSave} variant="contained" color="primary">
+          <Button onClick={onClose} color="secondary">
+            Cancelar
+          </Button>
+          <Button onClick={handleSave} color="primary" variant="contained">
             Guardar
-          </button>
+          </Button>
         </DialogActions>
       </Dialog>
 
       {/* Modal para el código de validación */}
       <Modal open={modalCodigoOpen} onClose={() => setModalCodigoOpen(false)}>
         <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 400,
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-          }}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          bgcolor="white"
+          p={4}
+          borderRadius={4}
+          boxShadow={24}
+          mx="auto"
+          mt="20vh"
+          width={300}
         >
-          <h2>Ingrese el código de validación</h2>
+          <h2>Código de Validación</h2>
           <TextField
-            label="Código de validación"
+            label="Ingrese el código"
             value={codigoValidacion}
             onChange={(e) => setCodigoValidacion(e.target.value)}
             fullWidth
           />
-          <Button onClick={handleCodigoValidacion} variant="contained" color="primary" fullWidth>
-            Validar
-          </Button>
+          <Box mt={2}>
+            <Button variant="contained" color="primary" onClick={handleCodigoValidacion}>
+              Validar
+            </Button>
+          </Box>
         </Box>
       </Modal>
     </>
