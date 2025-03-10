@@ -19,7 +19,7 @@ const Pedidos = () => {
   const [selectedDay, setSelectedDay] = useState('');
   const [selectedProducto, setSelectedProducto] = useState('');
   const [productos, setProductos] = useState([]);
-  const pedidosPorPagina = 15;
+  const pedidosPorPagina = 10;
 
   const username = localStorage.getItem('username'); //
 

@@ -90,7 +90,7 @@ const Oficina = () => {
   return (
     <Box p={4}>
       <div className='titulo-container'>
-        <h1 className='titulo-table'>Gestión de ㅤ  Oficinas</h1>
+        <h1 className='titulo-table'>Gestión de Oficinas</h1>
         <Button className='boton-table' colorScheme="blue" onClick={() => setIsModalOpen(true)}>
           + Nueva Oficina
         </Button>

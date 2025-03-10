@@ -157,22 +157,21 @@ const Dashboard = () => {
             </ul>
           </div>
 
-          <div className='profile-section'>
-            <h3 className='menu-title'>Cuenta</h3>
-            <ul>
-              <li>
-                <div className='user-profile'>
-                  <img 
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
-                    alt="Profile" 
-                    className="profile-image" 
-                  />
-                  <div className="profile-details">
-                    <span className="profile-name">{username || 'Admin'}</span> {/* Mostrar el username obtenido */}
-                  </div>
+          <div className="profile-section">
+            <h3 className="menu-title">CUENTA</h3>
+            <div className="account-card">
+              <div className="user-badge">
+                <div className="user-initials">{username ? username.charAt(0).toUpperCase() : 'A'}</div>
+                <div className="account-info">
+                  <span className="account-name">{username || 'Admin'}</span>
+                  <span className="account-role">Administrador</span>
                 </div>
-              </li>
-            </ul>
+              </div>
+              <div className="account-status">
+                <span className="status-indicator"></span>
+                <span className="status-text">Activo</span>
+              </div>
+            </div>
           </div>
         </nav>
       </aside>

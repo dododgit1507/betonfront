@@ -153,7 +153,7 @@ const PedidoModal = ({ isOpen, onClose, addPedido }) => {
     <div className="modal-overlay">
       <div className="modal-content-pedido">
         <div className="modal-header">
-          <h1 className='modaltitle'>Nuevo Pedido</h1>
+          <h1 className='modal-title-proyecto'>Nuevo Pedido</h1>
           <button onClick={onClose} className="close-modal">
             &times;
           </button>

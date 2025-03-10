@@ -28,7 +28,7 @@ const ClientesModal = ({ closeModal, addCliente }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
-          <h1 className='modal-title'>Nuevo Cliente</h1>
+          <h1 className='modal-title-proyecto'>Nuevo Cliente</h1>
           <button onClick={closeModal} className="close-modal">
             &times;
           </button>

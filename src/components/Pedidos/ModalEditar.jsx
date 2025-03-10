@@ -322,10 +322,10 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancelar</Button>
-          <Button onClick={handleSave} variant="contained" color="primary">
+          <button className="btn-cancelar" onClick={onClose}>Cancelar</button>
+          <button className="btn-guardar" onClick={handleSave} variant="contained" color="primary">
             Guardar
-          </Button>
+          </button>
         </DialogActions>
       </Dialog>
 

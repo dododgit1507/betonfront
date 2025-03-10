@@ -142,7 +142,7 @@ const Envios = () => {
   return (
     <Box p={4}>
       <div className='titulo-container'>
-        <h1 className='titulo-table'>Gestión de ㅤ  Envios</h1>
+        <h1 className='titulo-table'>Gestión de Envios</h1>
         <Button className='boton-table' colorScheme="blue" onClick={() => setIsModalOpen(true)}>
           + Agregar Envío
         </Button>

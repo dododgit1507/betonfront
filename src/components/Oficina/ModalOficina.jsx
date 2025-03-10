@@ -22,7 +22,7 @@ const ModalOficina = ({ closeModal, addOficina }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
-          <h2>Nueva Oficina Técnica</h2>
+          <h1 className='modal-title-proyecto'>Nuevo Técnico</h1>
           <button onClick={closeModal} className="close-modal">
             &times;
           </button>
