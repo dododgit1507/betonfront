@@ -3,7 +3,6 @@ import './Password.css';
 
 const Password = () => {
   const [password, setPassword] = useState('');
-  const [usuarioId] = useState(1); // ID del usuario (puedes cambiarlo según sea necesario)
 
   const generatePassword = () => {
     const length = 12;
@@ -18,10 +17,10 @@ const Password = () => {
     setPassword(newPassword);
 
     // Enviar el código generado al backend
-    sendPasswordToBackend(newPassword, usuarioId);
+    sendPasswordToBackend(newPassword);
   };
 
-  const sendPasswordToBackend = async (newPassword, userId) => {
+  const sendPasswordToBackend = async (newPassword) => {
     try {
       const response = await fetch('http://localhost:3000/codigo', {
         method: 'POST',
@@ -30,7 +29,6 @@ const Password = () => {
         },
         body: JSON.stringify({
           codigo: newPassword,
-          usuarioId: userId,
         }),
       });
 
