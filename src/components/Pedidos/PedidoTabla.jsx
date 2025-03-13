@@ -125,9 +125,10 @@ const PedidoTabla = ({
   onYearChange,
   onMonthChange,
   onDayChange,
+  onPedidoUpdated // Nuevo prop para manejar la actualización
 }) => {
-  const [openModal, setOpenModal] = useState(false);
-  const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedPedido, setSelectedPedido] = useState(null);
 
   if (loading) {
     return <Typography>Cargando pedidos...</Typography>;
@@ -138,19 +139,20 @@ const PedidoTabla = ({
   }
 
   const handleEditClick = (pedido) => {
-    setPedidoSeleccionado(pedido);
-    setOpenModal(true);
+    setSelectedPedido(pedido);
+    setEditModalOpen(true);
   };
 
-  const handleModalClose = () => {
-    setOpenModal(false);
-    setPedidoSeleccionado(null);
+  const handleEditClose = () => {
+    setEditModalOpen(false);
+    setSelectedPedido(null);
   };
 
-  const handleGuardarPedido = (pedidoActualizado) => {
-    console.log('Pedido actualizado:', pedidoActualizado);
-    // Aquí puedes agregar la lógica para actualizar el pedido en tu backend o estado global
-    setOpenModal(false);
+  const handlePedidoUpdated = (updatedPedido) => {
+    if (onPedidoUpdated) {
+      onPedidoUpdated(updatedPedido);
+    }
+    handleEditClose();
   };
 
   return (
@@ -292,12 +294,12 @@ const PedidoTabla = ({
         labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
       />
 
-      {openModal && (
+      {editModalOpen && (
         <ModalEditar
-          open={openModal}
-          onClose={handleModalClose}
-          pedido={pedidoSeleccionado}
-          onSave={handleGuardarPedido}
+          open={editModalOpen}
+          onClose={handleEditClose}
+          pedido={selectedPedido}
+          onSave={handlePedidoUpdated}
         />
       )}
     </Box>

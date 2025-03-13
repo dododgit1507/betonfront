@@ -194,6 +194,24 @@ const Pedidos = () => {
     }
   };
 
+  const handlePedidoUpdated = (updatedPedido) => {
+    // Actualizar la lista de pedidos
+    fetchPedidos();
+    
+    // Mostrar mensaje de éxito
+    toast({
+      title: 'Pedido actualizado',
+      description: 'El pedido se ha actualizado correctamente.',
+      status: 'success',
+      duration: 3000,
+      position: 'bottom-right',
+      isClosable: true,
+      containerStyle: {
+        marginBottom: '20px',
+      },
+    });
+  };
+
   return (
     <Box p={4}>
       <div className="titulo-container">
@@ -227,6 +245,7 @@ const Pedidos = () => {
           onYearChange={handleYearChange}
           onMonthChange={handleMonthChange}
           onDayChange={handleDayChange}
+          onPedidoUpdated={handlePedidoUpdated}
         />
       )}
 

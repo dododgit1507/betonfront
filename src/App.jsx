@@ -8,6 +8,7 @@ import Clientes from './components/Clientes/Clientes';
 import Settings from './components/Settings/Settings';
 import Oficina from './components/Oficina/Oficina';
 import Password from './components/Password/Password';
+import Auditoria from './components/Auditoria/Auditoria';
 
 // Simulación del rol actual del usuario (esto se obtendría de tu estado global o autenticación real)
 const getUserRole = () => {
@@ -110,6 +111,14 @@ function App() {
           element={
             <PrivateRoute allowedRoles={['INGENIERO', 'ADMIN']}>
               <Settings />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="auditoria"
+          element={
+            <PrivateRoute allowedRoles={['INGENIERO', 'ADMIN']}>
+              <Auditoria />
             </PrivateRoute>
           }
         />

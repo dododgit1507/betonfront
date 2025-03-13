@@ -70,6 +70,12 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
   const [ingenieros, setIngenieros] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  // Estilo para campos bloqueados
+  const disabledFieldStyle = {
+    border: '1px solid #A65248',
+    color: '#A65248'
+  };
+
   // Este efecto se ejecuta cuando cambia el pedido o cuando se abre el modal
   useEffect(() => {
     if (pedido) {
@@ -392,7 +398,7 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
                   value={formValues.codigo_pedido}
                   onChange={handleInputChange}
                   style={{ width: '100%' }}
-                  disabled
+                  disabled={true}
                 />
                 <button
                   type="button"
@@ -412,7 +418,8 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
                 name="id_proyecto_cup"
                 value={formValues.id_proyecto_cup}
                 onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
+                disabled={userRole === 'CLIENTE' || userRole === 'INGENIERO'}
+                style={userRole === 'INGENIERO' ? disabledFieldStyle : {}}
                 required
               >
                 <option value="">--Seleccione un proyecto</option>
@@ -432,7 +439,8 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
                 name="id_usuario"
                 value={formValues.id_usuario}
                 onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
+                disabled={userRole === 'CLIENTE' || userRole === 'INGENIERO'}
+                style={userRole === 'INGENIERO' ? disabledFieldStyle : {}}
                 required
               >
                 <option value="">--Seleccione un usuario</option>
@@ -452,7 +460,8 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
                 name="id_producto"
                 value={formValues.id_producto}
                 onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
+                disabled={userRole === 'CLIENTE' || userRole === 'INGENIERO'}
+                style={userRole === 'INGENIERO' ? disabledFieldStyle : {}}
                 required
               >
                 <option value="">--Seleccione un producto</option>
@@ -490,7 +499,7 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
                     }}
                   />
                 </LocalizationProvider>
-                {userRole !== 'CLIENTE' && (
+                {userRole === 'INGENIERO' && (
                   <button
                     type="button"
                     onClick={handleFechaClick}
@@ -647,7 +656,8 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
                 name="id_ingeniero"
                 value={formValues.id_ingeniero}
                 onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
+                disabled={userRole === 'CLIENTE' || userRole === 'INGENIERO'}
+                style={userRole === 'INGENIERO' ? disabledFieldStyle : {}}
                 required
               >
                 <option value="">--Seleccione un Ingeniero</option>
@@ -723,7 +733,8 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
                 name="nivel"
                 value={formValues.nivel}
                 onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
+                disabled={userRole === 'CLIENTE' || userRole === 'INGENIERO'}
+                style={userRole === 'INGENIERO' ? disabledFieldStyle : {}}
                 required
               />
             </div>
