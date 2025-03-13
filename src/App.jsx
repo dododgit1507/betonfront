@@ -57,7 +57,7 @@ function App() {
       <Route
         path="/dashboard"
         element={
-          <PrivateRoute allowedRoles={['Cliente', 'INGENIERO', 'ADMIN']}>
+          <PrivateRoute allowedRoles={['CLIENTE', 'INGENIERO', 'ADMIN']}>
             <Dashboard />
           </PrivateRoute>
         }
@@ -66,7 +66,7 @@ function App() {
         <Route
           path="pedidos"
           element={
-            <PrivateRoute allowedRoles={['Cliente', 'INGENIERO', 'ADMIN']}>
+            <PrivateRoute allowedRoles={['CLIENTE', 'INGENIERO', 'ADMIN']}>
               <Pedidos />
             </PrivateRoute>
           }

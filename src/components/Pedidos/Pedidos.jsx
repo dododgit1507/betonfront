@@ -91,8 +91,6 @@ const Pedidos = () => {
 
   useEffect(() => {
     fetchPedidos();
-    const interval = setInterval(fetchPedidos, 1000); // Actualiza cada 5 segundos
-    return () => clearInterval(interval); // Limpia el intervalo cuando el componente se desmonta
   }, []);
 
   // Obtener años únicos de los pedidos

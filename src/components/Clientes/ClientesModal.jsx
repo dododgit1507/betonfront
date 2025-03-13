@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 const ClientesModal = ({ closeModal, addCliente }) => {
   const [newClient, setNewClient] = useState({
     nombre: '',
-    telefono: '',
     correo: '',
-    pais: 'Peru',
-    rol: 'Cliente',
+    telefono: '',
+    pais: 'PERÚ', // Valor predeterminado
+    distrito: '',
+    rol: 'CLIENTE', // Valor predeterminado
     contraseña: '',
   });
 
@@ -48,7 +49,7 @@ const ClientesModal = ({ closeModal, addCliente }) => {
           <div className="form-group">
             <label htmlFor="telefono">Teléfono:</label>
             <input
-              type="tel"
+              type="number"
               id="telefono"
               name="telefono"
               value={newClient.telefono}
@@ -75,9 +76,9 @@ const ClientesModal = ({ closeModal, addCliente }) => {
               value={newClient.rol}
               onChange={handleInputChange}
             >
-              <option value="CLIENTE">Cliente</option>
-              <option value="INGENIERO">Ingeniero</option>
-              <option value="ADMIN">Admin</option>
+              <option value="CLIENTE">CLIENTE</option>
+              <option value="INGENIERO">INGENIERO</option>
+              <option value="ADMIN">ADMIN</option>
             </select>
           </div>
           <div className="form-group">
@@ -88,10 +89,21 @@ const ClientesModal = ({ closeModal, addCliente }) => {
               value={newClient.pais}
               onChange={handleInputChange}
             >
-              <option value="Perú">Perú</option>
-              <option value="Chile">Chile</option>
-              <option value="Panamá">Panamá</option>
+              <option value="PERÚ">PERÚ</option>
+              <option value="CHILE">CHILE</option>
+              <option value="PANAMA">PANAMA</option>
             </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="distrito">Distrito:</label>
+            <input
+              type="text"
+              id="distrito"
+              name="distrito"
+              value={newClient.distrito}
+              onChange={handleInputChange}
+              required
+            />
           </div>
           <div className="form-group">
             <label htmlFor="contraseña">Contraseña:</label>

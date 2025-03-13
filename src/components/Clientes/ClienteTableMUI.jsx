@@ -138,6 +138,7 @@ const ClienteTableMUI = ({
               <TableCell style={{ minWidth: 200 }}>Correo</TableCell>
               <TableCell style={{ minWidth: 150 }}>Rol</TableCell>
               <TableCell style={{ minWidth: 150 }}>País</TableCell>
+              <TableCell style={{ minWidth: 150 }}>Distrito</TableCell>
               <TableCell style={{ minWidth: 80 }}>Acciones</TableCell>
             </TableRow>
           </StyledTableHead>
@@ -152,6 +153,7 @@ const ClienteTableMUI = ({
                   <TableCell>{cliente.correo}</TableCell>
                   <TableCell>{cliente.rol}</TableCell>
                   <TableCell>{cliente.pais}</TableCell>
+                  <TableCell>{cliente.distrito}</TableCell>
                   <TableCell align="left">
                     <StyledIconButton aria-label="editar cliente">
                       <EditIcon />
@@ -161,7 +163,7 @@ const ClienteTableMUI = ({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} align="center">
+                <TableCell colSpan={7} align="center">
                   No hay clientes registrados
                 </TableCell>
               </TableRow>

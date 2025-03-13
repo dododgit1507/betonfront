@@ -154,7 +154,7 @@ const OficinaTableMUI = ({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={7} align="center">
+                <TableCell colSpan={4} align="center">
                   No hay oficinas registradas
                 </TableCell>
               </TableRow>

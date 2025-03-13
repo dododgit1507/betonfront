@@ -9,19 +9,23 @@ const PedidoModal = ({ isOpen, onClose, addPedido }) => {
     codigo_pedido: '',
     fecha: '',
     hora: '',
+    piso: '',
     nivel: '',
     metros_cuadrados: '',
     metros_lineales: '',
     kilogramos: '',
     frisos: '',
     chatas: '',
+    unidades: '',
+    especiales: '',
     codigo_plano: '',
     planta: '',
     id_proyecto_cup: '',
     id_producto: '',
     id_usuario: '',
     id_transporte: '',
-    id_oficina: ''
+    id_oficina: '',
+    id_ingeniero: ''
   });
 
   const generarCodigoPedido = () => {
@@ -38,6 +42,8 @@ const PedidoModal = ({ isOpen, onClose, addPedido }) => {
   const [usuarios, setUsuarios] = useState([]);
   const [transportes, setTransportes] = useState([]);
   const [oficinas, setOficinas] = useState([]);
+  const [ingenieros, setIngenieros] = useState([]);
+  const [clientes, setClientes] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +51,7 @@ const PedidoModal = ({ isOpen, onClose, addPedido }) => {
         const resProyectos = await fetch('http://localhost:3000/proyecto');
         if (!resProyectos.ok) throw new Error('Error fetching proyectos');
         const proyectos = await resProyectos.json();
-        setProyectosCUP(proyectos);
+        setProyectosCUP(proyectos);   
   
         const resProductos = await fetch('http://localhost:3000/producto');
         if (!resProductos.ok) throw new Error('Error fetching productos');
@@ -56,6 +62,11 @@ const PedidoModal = ({ isOpen, onClose, addPedido }) => {
         if (!resUsuarios.ok) throw new Error('Error fetching usuarios');
         const usuarios = await resUsuarios.json();
         setUsuarios(usuarios);
+
+        const resClientes = await fetch('http://localhost:3000/cliente');
+        if (!resClientes.ok) throw new Error('Error fetching clientes');
+        const clientes = await resClientes.json();
+        setClientes(clientes);
   
         const resTransportes = await fetch('http://localhost:3000/transporte');
         if (!resTransportes.ok) throw new Error('Error fetching transportes');
@@ -66,6 +77,11 @@ const PedidoModal = ({ isOpen, onClose, addPedido }) => {
         if (!resOficinas.ok) throw new Error('Error fetching oficinas');
         const oficinas = await resOficinas.json();
         setOficinas(oficinas);
+
+        const resIngenieros = await fetch('http://localhost:3000/ingeniero');
+        if (!resIngenieros.ok) throw new Error('Error fetching ingenieros');
+        const ingenieros = await resIngenieros.json();
+        setIngenieros(ingenieros);
       } catch (err) {
         console.error('Error fetching data:', err);
       }
@@ -210,9 +226,9 @@ const PedidoModal = ({ isOpen, onClose, addPedido }) => {
               required
             >
               <option value="">--Seleccione un usuario</option>
-              {usuarios.map((usuario) => (
-                <option key={usuario.id} value={usuario.id}>
-                  {usuario.nombre}
+              {clientes.map((cliente) => (
+                <option key={cliente.id} value={cliente.id}>
+                  {cliente.nombre}
                 </option>
               ))}
             </select>
@@ -327,6 +343,30 @@ const PedidoModal = ({ isOpen, onClose, addPedido }) => {
           </div>
 
           <div className="form-group">
+            <label htmlFor="unidades">Unidades:</label>
+            <input
+              type="number"
+              id="unidades"
+              name="unidades"
+              value={newPedido.unidades}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="especiales">Especiales:</label>
+            <input
+              type="text"
+              id="especiales"
+              name="especiales"
+              value={newPedido.especiales}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
             <label htmlFor="id_oficina">Oficina Técnica:</label>
             <select
               id="id_oficina"
@@ -335,10 +375,28 @@ const PedidoModal = ({ isOpen, onClose, addPedido }) => {
               onChange={handleInputChange}
               required
             >
-              <option value="">--Seleccione un técnico</option>
+              <option value="">--Seleccione un Técnico</option>
               {oficinas.map((oficina) => (
                 <option key={oficina.id} value={oficina.id}>
                   {oficina.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="id_ingeniero">Ingeniero:</label>
+            <select
+              id="id_ingeniero"
+              name="id_ingeniero"
+              value={newPedido.id_ingeniero}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">--Seleccione un Ingeniero</option>
+              {ingenieros.map((ingeniero) => (
+                <option key={ingeniero.id} value={ingeniero.id}>
+                  {ingeniero.nombre}
                 </option>
               ))}
             </select>
@@ -369,6 +427,18 @@ const PedidoModal = ({ isOpen, onClose, addPedido }) => {
               id="codigo_plano"
               name="codigo_plano"
               value={newPedido.codigo_plano}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="piso">Piso:</label>
+            <input
+              type="text"
+              id="piso"
+              name="piso"
+              value={newPedido.piso}
               onChange={handleInputChange}
               required
             />

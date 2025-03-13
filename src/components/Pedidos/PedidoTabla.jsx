@@ -212,7 +212,7 @@ const PedidoTabla = ({
         <Table stickyHeader aria-label="tabla de pedidos">
           <StyledTableHead>
             <TableRow>
-            <TableCell style={{ minWidth: 150 }}>Proyecto</TableCell>
+              <TableCell style={{ minWidth: 150 }}>Proyecto</TableCell>
               <TableCell style={{ minWidth: 150 }}>Código</TableCell>
               <TableCell style={{ minWidth: 100 }}>Tipo</TableCell>
               <TableCell style={{ minWidth: 120 }}>Programa</TableCell>
@@ -222,8 +222,12 @@ const PedidoTabla = ({
               <TableCell style={{ minWidth: 100 }}>KG</TableCell>
               <TableCell style={{ minWidth: 100 }}>Frisos(ML)</TableCell>
               <TableCell style={{ minWidth: 100 }}>Chatas(KG)</TableCell>
+              <TableCell style={{ minWidth: 100 }}>Unidades</TableCell>
+              <TableCell style={{ minWidth: 100 }}>Especiales</TableCell>
               <TableCell style={{ minWidth: 120 }}>Fecha</TableCell>
+              <TableCell style={{ minWidth: 120 }}>Ingeniero</TableCell>
               <TableCell style={{ minWidth: 120 }}>Hora</TableCell>
+              <TableCell style={{ minWidth: 120 }}>Piso</TableCell>
               <TableCell style={{ minWidth: 150 }}>Nivel</TableCell>
               <TableCell style={{ minWidth: 100 }}>Codigo Plano PL</TableCell>
               <TableCell style={{ minWidth: 100 }}>Planta</TableCell>
@@ -248,8 +252,12 @@ const PedidoTabla = ({
                   <TableCell>{pedido.kg}</TableCell>
                   <TableCell>{pedido.frisos_ml}</TableCell>
                   <TableCell>{pedido.chatas_kg}</TableCell>
+                  <TableCell>{pedido.unidades}</TableCell>
+                  <TableCell>{pedido.especiales}</TableCell>
                   <TableCell>{new Date(pedido.fecha).toLocaleDateString()}</TableCell>
+                  <TableCell>{pedido.nombre_ingeniero}</TableCell>
                   <TableCell>{pedido.hora}</TableCell>
+                  <TableCell>{pedido.piso}</TableCell>
                   <TableCell>{pedido.nivel}</TableCell>
                   <TableCell>{pedido.codigo_plano}</TableCell>
                   <TableCell>{pedido.planta}</TableCell>

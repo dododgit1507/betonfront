@@ -75,22 +75,38 @@ const Clientes = () => {
   };
 
   const addCliente = async (nuevoCliente) => {
-    try {
-      const response = await fetch('http://localhost:3000/registrar_cliente', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(nuevoCliente),
-      });
+  try {
+    console.log('Objeto a enviar:', nuevoCliente);
+    console.log('JSON a enviar:', JSON.stringify(nuevoCliente));
+    
+    const response = await fetch('http://localhost:3000/registrar_cliente', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(nuevoCliente),
+    });
 
-      if (!response.ok) throw new Error('Error al registrar el cliente');
-      
-      await fetchClientes();
-      setIsModalOpen(false);
-      showToast();
-    } catch (error) {
-      console.error('Error en la solicitud:', error);
+    const responseData = await response.json();
+    console.log('Respuesta del servidor:', responseData);
+
+    if (!response.ok) {
+      throw new Error(responseData.message || 'Error al registrar el cliente');
     }
-  };
+    
+    await fetchClientes();
+    setIsModalOpen(false);
+    showToast();
+  } catch (error) {
+    console.error('Error en la solicitud:', error);
+    toast({
+      title: 'Error',
+      description: error.message,
+      status: 'error',
+      duration: 5000,
+      position: 'bottom-right',
+      isClosable: true,
+    });
+  }
+};
 
   return (
     <Box p={4}>

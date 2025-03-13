@@ -13,6 +13,7 @@ const Dashboard = () => {
   const [rol, setRol] = useState(null);
 
   useEffect(() => {
+    console.log('DEBUG - Rol en Dashboard:', localStorage.getItem('userRole'));
     // Obtener el rol desde el localStorage
     const storedRol = localStorage.getItem('userRole');
     setRol(storedRol);
@@ -58,7 +59,7 @@ const Dashboard = () => {
             <h3 className="menu-title">MENU</h3>
             <ul>
               {/* Mostrar solo los iconos para el rol de 'cliente' */}
-              {rol === 'Cliente' && (
+              {rol === "CLIENTE" && (
                 <li>
                   <NavLink to="/dashboard/pedidos" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
                     <Home size={20} />
