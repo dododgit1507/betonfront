@@ -619,46 +619,6 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
               />
             </div>
 
-            {/* Código Plano */}
-            <div className="form-group">
-              <label htmlFor="codigo_plano">Plano:</label>
-              <input
-                type="text"
-                id="codigo_plano"
-                name="codigo_plano"
-                value={formValues.codigo_plano}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
-                required
-              />
-            </div>
-
-            {/* Planta */}
-            <div className="form-group">
-              <label htmlFor="planta">Planta:</label>
-              <select
-                id="planta"
-                name="planta"
-                value={formValues.planta}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
-                required
-              >
-                <option value="">--Seleccione una planta</option>
-                {[
-                  { id: 'PLANTA-1', nombre: 'PLANTA 1' },
-                  { id: 'PLANTA-2', nombre: 'PLANTA 2' },
-                  { id: 'PLANTA-4', nombre: 'PLANTA 4' },
-                  { id: 'PT-AREQUIPA', nombre: 'PT AREQUIPA' },
-                  { id: 'PT-ROTACIÓN', nombre: 'PT ROTACIÓN' }
-                ].map((planta) => (
-                  <option key={planta.id} value={planta.id}>
-                    {planta.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-
             {/* Oficina Técnica */}
             <div className="form-group">
               <label htmlFor="id_oficina">Oficina Técnica:</label>
@@ -698,6 +658,47 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
                 ))}
               </select>
             </div>
+
+            {/* Planta */}
+            <div className="form-group">
+              <label htmlFor="planta">Planta:</label>
+              <select
+                id="planta"
+                name="planta"
+                value={formValues.planta}
+                onChange={handleInputChange}
+                disabled={userRole === 'CLIENTE'}
+                required
+              >
+                <option value="">--Seleccione una planta</option>
+                {[
+                  { id: 'PLANTA-1', nombre: 'PLANTA 1' },
+                  { id: 'PLANTA-2', nombre: 'PLANTA 2' },
+                  { id: 'PLANTA-4', nombre: 'PLANTA 4' },
+                  { id: 'PT-AREQUIPA', nombre: 'PT AREQUIPA' },
+                  { id: 'PT-ROTACIÓN', nombre: 'PT ROTACIÓN' }
+                ].map((planta) => (
+                  <option key={planta.id} value={planta.id}>
+                    {planta.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Código Plano */}
+            <div className="form-group">
+              <label htmlFor="codigo_plano">Código de Plano:</label>
+              <input
+                type="text"
+                id="codigo_plano"
+                name="codigo_plano"
+                value={formValues.codigo_plano}
+                onChange={handleInputChange}
+                disabled={userRole === 'CLIENTE'}
+                required
+              />
+            </div>
+
 
             {/* Piso */}
             <div className="form-group">
