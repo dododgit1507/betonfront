@@ -216,7 +216,9 @@ const Pedidos = () => {
     <Box p={4}>
       <div className="titulo-container">
         <h1 className='titulo-table'>Gestión de Pedidos</h1>
-        <button className='boton-table' onClick={() => setIsModalOpen(true)}> + Agregar Pedido</button>
+        {userRole !== 'CLIENTE' && (
+          <button className='boton-table' onClick={() => setIsModalOpen(true)}> + Agregar Pedido</button>
+        )}
       </div>
 
       {loading ? (

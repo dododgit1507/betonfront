@@ -431,47 +431,51 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
               </select>
             </div>
 
-            {/* Cliente */}
-            <div className="form-group">
-              <label htmlFor="id_usuario">Cliente:</label>
-              <select
-                id="id_usuario"
-                name="id_usuario"
-                value={formValues.id_usuario}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE' || userRole === 'INGENIERO'}
-                style={userRole === 'INGENIERO' ? disabledFieldStyle : {}}
-                required
-              >
-                <option value="">--Seleccione un usuario</option>
-                {clientes.map((cliente) => (
-                  <option key={cliente.id} value={cliente.id}>
-                    {cliente.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* Cliente - Solo mostrar si no es CLIENTE */}
+            {userRole !== 'CLIENTE' && (
+              <div className="form-group">
+                <label htmlFor="id_usuario">Cliente:</label>
+                <select
+                  id="id_usuario"
+                  name="id_usuario"
+                  value={formValues.id_usuario}
+                  onChange={handleInputChange}
+                  disabled={userRole === 'CLIENTE' || userRole === 'INGENIERO'}
+                  style={userRole === 'INGENIERO' ? disabledFieldStyle : {}}
+                  required
+                >
+                  <option value="">--Seleccione un usuario</option>
+                  {clientes.map((cliente) => (
+                    <option key={cliente.id} value={cliente.id}>
+                      {cliente.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
-            {/* Producto */}
-            <div className="form-group">
-              <label htmlFor="id_producto">Producto:</label>
-              <select
-                id="id_producto"
-                name="id_producto"
-                value={formValues.id_producto}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE' || userRole === 'INGENIERO'}
-                style={userRole === 'INGENIERO' ? disabledFieldStyle : {}}
-                required
-              >
-                <option value="">--Seleccione un producto</option>
-                {productos.map((producto) => (
-                  <option key={producto.id_producto} value={producto.id_producto}>
-                    {producto.tipo}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* Producto - Solo mostrar si no es CLIENTE */}
+            {userRole !== 'CLIENTE' && (
+              <div className="form-group">
+                <label htmlFor="id_producto">Producto:</label>
+                <select
+                  id="id_producto"
+                  name="id_producto"
+                  value={formValues.id_producto}
+                  onChange={handleInputChange}
+                  disabled={userRole === 'CLIENTE' || userRole === 'INGENIERO'}
+                  style={userRole === 'INGENIERO' ? disabledFieldStyle : {}}
+                  required
+                >
+                  <option value="">--Seleccione un producto</option>
+                  {productos.map((producto) => (
+                    <option key={producto.id_producto} value={producto.id_producto}>
+                      {producto.tipo}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {/* Fecha */}
             <div className="form-group">
@@ -521,7 +525,6 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
                 name="hora"
                 value={formValues.hora}
                 onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
                 required
               />
             </div>       
@@ -556,19 +559,21 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
               </div>
             )}
 
-            {/* Kilogramos */}
-            <div className="form-group">
-              <label htmlFor="kilogramos">Kilogramos:</label>
-              <input
-                type="number"
-                id="kilogramos"
-                name="kilogramos"
-                value={formValues.kilogramos}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
-                required
-              />
-            </div>
+            {/* Kilogramos - Solo mostrar si no es CLIENTE */}
+            {userRole !== 'CLIENTE' && (
+              <div className="form-group">
+                <label htmlFor="kilogramos">Kilogramos:</label>
+                <input
+                  type="number"
+                  id="kilogramos"
+                  name="kilogramos"
+                  value={formValues.kilogramos}
+                  onChange={handleInputChange}
+                  disabled={userRole === 'CLIENTE'}
+                  required
+                />
+              </div>
+            )}
 
             {/* Frisos - mostrar solo si corresponde */}
             {shouldShowField('frisos') && (
@@ -586,67 +591,53 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
               </div>
             )}
 
-            {/* Chatas */}
-            <div className="form-group">
-              <label htmlFor="chatas">Chatas:</label>
-              <input
-                type="number"
-                id="chatas"
-                name="chatas"
-                value={formValues.chatas}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
-                required
-              />
-            </div>
+            {/* Chatas - Solo mostrar si no es CLIENTE */}
+            {userRole !== 'CLIENTE' && (
+              <div className="form-group">
+                <label htmlFor="chatas">Chatas:</label>
+                <input
+                  type="number"
+                  id="chatas"
+                  name="chatas"
+                  value={formValues.chatas}
+                  onChange={handleInputChange}
+                  disabled={userRole === 'CLIENTE'}
+                  required
+                />
+              </div>
+            )}
 
-            {/* Unidades */}
-            <div className="form-group">
-              <label htmlFor="unidades">Unidades:</label>
-              <input
-                type="number"
-                id="unidades"
-                name="unidades"
-                value={formValues.unidades}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
-                required
-              />
-            </div>
+            {/* Unidades - Solo mostrar si no es CLIENTE */}
+            {userRole !== 'CLIENTE' && (
+              <div className="form-group">
+                <label htmlFor="unidades">Unidades:</label>
+                <input
+                  type="number"
+                  id="unidades"
+                  name="unidades"
+                  value={formValues.unidades}
+                  onChange={handleInputChange}
+                  disabled={userRole === 'CLIENTE'}
+                  required
+                />
+              </div>
+            )}
 
-            {/* Especiales */}
-            <div className="form-group">
-              <label htmlFor="especiales">Especiales:</label>
-              <input
-                type="text"
-                id="especiales"
-                name="especiales"
-                value={formValues.especiales}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
-                required
-              />
-            </div>
-
-            {/* Oficina Técnica */}
-            <div className="form-group">
-              <label htmlFor="id_oficina">Oficina Técnica:</label>
-              <select
-                id="id_oficina"
-                name="id_oficina"
-                value={formValues.id_oficina}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
-                required
-              >
-                <option value="">--Seleccione un Técnico</option>
-                {oficinas.map((oficina) => (
-                  <option key={oficina.id} value={oficina.id}>
-                    {oficina.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* Especiales - Solo mostrar si no es CLIENTE */}
+            {userRole !== 'CLIENTE' && (
+              <div className="form-group">
+                <label htmlFor="especiales">Especiales:</label>
+                <input
+                  type="text"
+                  id="especiales"
+                  name="especiales"
+                  value={formValues.especiales}
+                  onChange={handleInputChange}
+                  disabled={userRole === 'CLIENTE'}
+                  required
+                />
+              </div>
+            )}
 
             {/* Ingeniero */}
             <div className="form-group">
@@ -656,8 +647,7 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
                 name="id_ingeniero"
                 value={formValues.id_ingeniero}
                 onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE' || userRole === 'INGENIERO'}
-                style={userRole === 'INGENIERO' ? disabledFieldStyle : {}}
+                disabled={userRole === 'CLIENTE'}
                 required
               >
                 <option value="">--Seleccione un Ingeniero</option>
@@ -669,135 +659,154 @@ const ModalEditar = ({ open, onClose, pedido, onSave }) => {
               </select>
             </div>
 
-            {/* Planta */}
-            <div className="form-group">
-              <label htmlFor="planta">Planta:</label>
-              <select
-                id="planta"
-                name="planta"
-                value={formValues.planta}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
-                required
-              >
-                <option value="">--Seleccione una planta</option>
-                {[
-                  { id: 'PLANTA-1', nombre: 'PLANTA 1' },
-                  { id: 'PLANTA-2', nombre: 'PLANTA 2' },
-                  { id: 'PLANTA-4', nombre: 'PLANTA 4' },
-                  { id: 'PT-AREQUIPA', nombre: 'PT AREQUIPA' },
-                  { id: 'PT-ROTACIÓN', nombre: 'PT ROTACIÓN' }
-                ].map((planta) => (
-                  <option key={planta.id} value={planta.id}>
-                    {planta.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* Oficina Técnica - Solo mostrar si no es CLIENTE */}
+            {userRole !== 'CLIENTE' && (
+              <div className="form-group">
+                <label htmlFor="id_oficina">Oficina Técnica:</label>
+                <select
+                  id="id_oficina"
+                  name="id_oficina"
+                  value={formValues.id_oficina}
+                  onChange={handleInputChange}
+                  disabled={userRole === 'CLIENTE' || userRole === 'INGENIERO'}
+                  style={userRole === 'INGENIERO' ? disabledFieldStyle : {}}
+                  required
+                >
+                  <option value="">--Seleccione un Técnico</option>
+                  {oficinas.map((oficina) => (
+                    <option key={oficina.id} value={oficina.id}>
+                      {oficina.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
-            {/* Código Plano */}
-            <div className="form-group">
-              <label htmlFor="codigo_plano">Código de Plano:</label>
-              <input
-                type="text"
-                id="codigo_plano"
-                name="codigo_plano"
-                value={formValues.codigo_plano}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
-                required
-              />
-            </div>
+            {/* Planta - Solo mostrar si no es CLIENTE */}
+            {userRole !== 'CLIENTE' && (
+              <div className="form-group">
+                <label htmlFor="planta">Planta:</label>
+                <select
+                  id="planta"
+                  name="planta"
+                  value={formValues.planta}
+                  onChange={handleInputChange}
+                  disabled={userRole === 'CLIENTE'}
+                  required
+                >
+                  <option value="">--Seleccione una opción</option>
+                  <option value="PLANTA-1">PLANTA 1</option>
+                  <option value="PLANTA-2">PLANTA 2</option>
+                  <option value="PLANTA-4">PLANTA 4</option>
+                  <option value="PT-AREQUIPA">PT AREQUIPA</option>
+                  <option value="PT-ROTACIÓN">PT ROTACIÓN</option>
+                </select>
+              </div>
+            )}
 
+            {/* Código de Plano - Solo mostrar si no es CLIENTE */}
+            {userRole !== 'CLIENTE' && (
+              <div className="form-group">
+                <label htmlFor="codigo_plano">Código de Plano:</label>
+                <input
+                  type="text"
+                  id="codigo_plano"
+                  name="codigo_plano"
+                  value={formValues.codigo_plano}
+                  onChange={handleInputChange}
+                  disabled={userRole === 'CLIENTE'}
+                  required
+                />
+              </div>
+            )}
 
-            {/* Piso */}
-            <div className="form-group">
-              <label htmlFor="piso">Piso:</label>
-              <input
-                type="text"
-                id="piso"
-                name="piso"
-                value={formValues.piso}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
-                required
-              />
-            </div>
+            {/* Piso - Solo mostrar si no es CLIENTE */}
+            {userRole !== 'CLIENTE' && (
+              <div className="form-group">
+                <label htmlFor="piso">Piso:</label>
+                <input
+                  type="text"
+                  id="piso"
+                  name="piso"
+                  value={formValues.piso}
+                  onChange={handleInputChange}
+                  disabled={userRole === 'CLIENTE'}
+                  required
+                />
+              </div>
+            )}
 
-            {/* Nivel */}
-            <div className="form-group">
-              <label htmlFor="nivel">Nivel:</label>
-              <input
-                type="text"
-                id="nivel"
-                name="nivel"
-                value={formValues.nivel}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE' || userRole === 'INGENIERO'}
-                style={userRole === 'INGENIERO' ? disabledFieldStyle : {}}
-                required
-              />
-            </div>
+            {/* Nivel - Solo mostrar si no es CLIENTE */}
+            {userRole !== 'CLIENTE' && (
+              <div className="form-group">
+                <label htmlFor="nivel">Nivel:</label>
+                <input
+                  type="text"
+                  id="nivel"
+                  name="nivel"
+                  value={formValues.nivel}
+                  onChange={handleInputChange}
+                  disabled={userRole === 'CLIENTE'}
+                  required
+                />
+              </div>
+            )}
 
-            {/* Transporte */}
-            <div className="form-group">
-              <label htmlFor="id_transporte">Transporte:</label>
-              <select
-                id="id_transporte"
-                name="id_transporte"
-                value={formValues.id_transporte}
-                onChange={handleInputChange}
-                disabled={userRole === 'CLIENTE'}
-                required
-              >
-                <option value="">--Seleccione un transporte</option>
-                {transportes.map((transporte) => (
-                  <option key={transporte.id_transporte} value={transporte.id_transporte}>
-                    {transporte.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* Transporte - Solo mostrar si no es CLIENTE */}
+            {userRole !== 'CLIENTE' && (
+              <div className="form-group">
+                <label htmlFor="id_transporte">Transporte:</label>
+                <select
+                  id="id_transporte"
+                  name="id_transporte"
+                  value={formValues.id_transporte}
+                  onChange={handleInputChange}
+                  disabled={userRole === 'CLIENTE'}
+                  required
+                >
+                  <option value="">--Seleccione un transporte</option>
+                  {transportes.map((transporte) => (
+                    <option key={transporte.id_transporte} value={transporte.id_transporte}>
+                      {transporte.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div className="modal-footer-pedido">
               <button type="button" onClick={onClose} className="btn-cancelar">
                 Cancelar
               </button>
-              <button type="button" onClick={handleSave} className="btn-guardar">
-                Guardar
-              </button>
+              <button type="button" onClick={handleSave} className="btn-guardar">Guardar</button>
             </div>
           </form>
         </div>
       </div>
 
-      {/* Modal para el código de validación */}
+      {/* Modal para código de validación */}
       {modalCodigoOpen && (
         <div className="modal-overlay">
-          <div className="modal-content-pedido" style={{ maxWidth: '400px' }}>
+          <div className="modal-content-codigo">
             <div className="modal-header">
-              <h1 className='modal-title-proyecto'>Código de Validación</h1>
+              <h2>Ingrese Código de Validación</h2>
               <button onClick={() => setModalCodigoOpen(false)} className="close-modal">
                 &times;
               </button>
             </div>
-            <div style={{ padding: '20px' }}>
-              <div className="form-group">
-                <label>Ingrese el código</label>
-                <input
-                  value={codigoValidacion}
-                  onChange={(e) => setCodigoValidacion(e.target.value)}
-                  style={{ width: '100%' }}
-                />
-              </div>
-              <div className="modal-footer-pedido">
-                <button type="button" onClick={() => setModalCodigoOpen(false)} className="btn-cancelar">
-                  Cancelar
-                </button>
-                <button type="button" onClick={handleCodigoValidacion} className="btn-guardar">
-                  Validar
-                </button>
-              </div>
+            <div className="modal-body">
+              <input
+                type="text"
+                value={codigoValidacion}
+                onChange={(e) => setCodigoValidacion(e.target.value)}
+                placeholder="Ingrese el código"
+                className="input-codigo"
+              />
+            </div>
+            <div className="modal-footer">
+              <button onClick={handleCodigoValidacion} className="btn-validar">
+                Validar
+              </button>
             </div>
           </div>
         </div>

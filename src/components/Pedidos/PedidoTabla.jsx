@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -129,6 +129,13 @@ const PedidoTabla = ({
 }) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedPedido, setSelectedPedido] = useState(null);
+  const [userRole, setUserRole] = useState('');
+
+  useEffect(() => {
+    // Obtener el rol del usuario desde localStorage
+    const storedUserRole = localStorage.getItem('userRole');
+    setUserRole(storedUserRole);
+  }, []);
 
   if (loading) {
     return <Typography>Cargando pedidos...</Typography>;
@@ -154,6 +161,9 @@ const PedidoTabla = ({
     }
     handleEditClose();
   };
+
+  // Determinar qué columnas mostrar según el rol del usuario
+  const isClienteRole = userRole === 'CLIENTE';
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -216,27 +226,27 @@ const PedidoTabla = ({
             <TableRow>
               <TableCell style={{ minWidth: 150 }}>Proyecto</TableCell>
               <TableCell style={{ minWidth: 150 }}>Código</TableCell>
-              <TableCell style={{ minWidth: 100 }}>Tipo</TableCell>
-              <TableCell style={{ minWidth: 120 }}>Programa</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Oficina Técnica</TableCell>
+              {!isClienteRole && <TableCell style={{ minWidth: 100 }}>Tipo</TableCell>}
+              {!isClienteRole && <TableCell style={{ minWidth: 120 }}>Programa</TableCell>}
+              {!isClienteRole && <TableCell style={{ minWidth: 150 }}>Oficina Técnica</TableCell>}
               <TableCell style={{ minWidth: 100 }}>M2</TableCell>
               <TableCell style={{ minWidth: 100 }}>ML</TableCell>
-              <TableCell style={{ minWidth: 100 }}>KG</TableCell>
+              {!isClienteRole && <TableCell style={{ minWidth: 100 }}>KG</TableCell>}
               <TableCell style={{ minWidth: 100 }}>Frisos(ML)</TableCell>
-              <TableCell style={{ minWidth: 100 }}>Chatas(KG)</TableCell>
-              <TableCell style={{ minWidth: 100 }}>Unidades</TableCell>
-              <TableCell style={{ minWidth: 100 }}>Especiales</TableCell>
+              {!isClienteRole && <TableCell style={{ minWidth: 100 }}>Chatas(KG)</TableCell>}
+              {!isClienteRole && <TableCell style={{ minWidth: 100 }}>Unidades</TableCell>}
+              {!isClienteRole && <TableCell style={{ minWidth: 100 }}>Especiales</TableCell>}
               <TableCell style={{ minWidth: 120 }}>Fecha</TableCell>
               <TableCell style={{ minWidth: 120 }}>Ingeniero</TableCell>
               <TableCell style={{ minWidth: 120 }}>Hora</TableCell>
-              <TableCell style={{ minWidth: 120 }}>Piso</TableCell>
-              <TableCell style={{ minWidth: 150 }}>Nivel</TableCell>
-              <TableCell style={{ minWidth: 100 }}>Codigo Plano PL</TableCell>
-              <TableCell style={{ minWidth: 100 }}>Planta</TableCell>
-              <TableCell style={{ minWidth: 120 }}>Cliente</TableCell>
-              <TableCell style={{ minWidth: 100 }}>CUP</TableCell>
-              <TableCell style={{ minWidth: 100 }}>SUF</TableCell>
-              <TableCell style={{ minWidth: 100 }}>Transporte</TableCell>
+              {!isClienteRole && <TableCell style={{ minWidth: 120 }}>Piso</TableCell>}
+              {!isClienteRole && <TableCell style={{ minWidth: 150 }}>Nivel</TableCell>}
+              {!isClienteRole && <TableCell style={{ minWidth: 100 }}>Codigo Plano PL</TableCell>}
+              {!isClienteRole && <TableCell style={{ minWidth: 100 }}>Planta</TableCell>}
+              {!isClienteRole && <TableCell style={{ minWidth: 120 }}>Cliente</TableCell>}
+              {!isClienteRole && <TableCell style={{ minWidth: 100 }}>CUP</TableCell>}
+              {!isClienteRole && <TableCell style={{ minWidth: 100 }}>SUF</TableCell>}
+              {!isClienteRole && <TableCell style={{ minWidth: 100 }}>Transporte</TableCell>}
               <TableCell style={{ minWidth: 100 }}>Acciones</TableCell>
             </TableRow>
           </StyledTableHead>
@@ -246,27 +256,27 @@ const PedidoTabla = ({
                 <StyledTableRow key={pedido.codigo_pedido || index}>
                   <TableCell>{pedido.nombre_proyecto_cup}</TableCell>
                   <TableCell>{pedido.codigo_pedido}</TableCell>
-                  <TableCell>{pedido.nombre_producto}</TableCell>
-                  <TableCell>{pedido.oficina_especialidad}</TableCell>
-                  <TableCell>{pedido.nombre_oficina}</TableCell>
+                  {!isClienteRole && <TableCell>{pedido.nombre_producto}</TableCell>}
+                  {!isClienteRole && <TableCell>{pedido.oficina_especialidad}</TableCell>}
+                  {!isClienteRole && <TableCell>{pedido.nombre_oficina}</TableCell>}
                   <TableCell>{pedido.m2}</TableCell>
                   <TableCell>{pedido.ml}</TableCell>
-                  <TableCell>{pedido.kg}</TableCell>
+                  {!isClienteRole && <TableCell>{pedido.kg}</TableCell>}
                   <TableCell>{pedido.frisos_ml}</TableCell>
-                  <TableCell>{pedido.chatas_kg}</TableCell>
-                  <TableCell>{pedido.unidades}</TableCell>
-                  <TableCell>{pedido.especiales}</TableCell>
+                  {!isClienteRole && <TableCell>{pedido.chatas_kg}</TableCell>}
+                  {!isClienteRole && <TableCell>{pedido.unidades}</TableCell>}
+                  {!isClienteRole && <TableCell>{pedido.especiales}</TableCell>}
                   <TableCell>{new Date(pedido.fecha).toLocaleDateString()}</TableCell>
                   <TableCell>{pedido.nombre_ingeniero}</TableCell>
                   <TableCell>{pedido.hora}</TableCell>
-                  <TableCell>{pedido.piso}</TableCell>
-                  <TableCell>{pedido.nivel}</TableCell>
-                  <TableCell>{pedido.codigo_plano}</TableCell>
-                  <TableCell>{pedido.planta}</TableCell>
-                  <TableCell>{pedido.nombre_usuario}</TableCell>
-                  <TableCell>{pedido.id_proyecto_cup}</TableCell>
-                  <TableCell>{pedido.suf}</TableCell>
-                  <TableCell>{pedido.nombre_transporte}</TableCell>
+                  {!isClienteRole && <TableCell>{pedido.piso}</TableCell>}
+                  {!isClienteRole && <TableCell>{pedido.nivel}</TableCell>}
+                  {!isClienteRole && <TableCell>{pedido.codigo_plano}</TableCell>}
+                  {!isClienteRole && <TableCell>{pedido.planta}</TableCell>}
+                  {!isClienteRole && <TableCell>{pedido.nombre_usuario}</TableCell>}
+                  {!isClienteRole && <TableCell>{pedido.id_proyecto_cup}</TableCell>}
+                  {!isClienteRole && <TableCell>{pedido.suf}</TableCell>}
+                  {!isClienteRole && <TableCell>{pedido.nombre_transporte}</TableCell>}
                   <TableCell>
                     <StyledIconButton onClick={() => handleEditClick(pedido)}>
                       <EditIcon />
@@ -276,7 +286,7 @@ const PedidoTabla = ({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6}>No se encontraron pedidos.</TableCell>
+                <TableCell colSpan={isClienteRole ? 9 : 24}>No se encontraron pedidos.</TableCell>
               </TableRow>
             )}
           </TableBody>
