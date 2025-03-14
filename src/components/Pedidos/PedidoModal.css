@@ -133,3 +133,63 @@
   gap: 10px;
   align-items: flex-end;
 }
+
+/* Estilos para el modal de código de validación */
+.modal-content-codigo {
+  background-color: #fff;
+  width: 400px;
+  max-width: 90%;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content-codigo .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.modal-content-codigo .modal-header h2 {
+  font-size: 1.5rem;
+  margin: 0;
+  color: #333;
+}
+
+.modal-content-codigo .modal-body {
+  margin-bottom: 20px;
+}
+
+.input-codigo {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.modal-content-codigo .modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-validar {
+  background-color: #A65248;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btn-validar:hover {
+  background-color: #8a4339;
+  transform: translateY(-2px);
+}

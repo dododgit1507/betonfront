@@ -141,6 +141,12 @@ const Dashboard = () => {
                       <span>Generar Codigo</span>
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink to="/dashboard/auditoria" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
+                      <HelpCircle size={20} />
+                      <span>Auditoría</span>
+                    </NavLink>
+                  </li>
                 </>
               )}
             </ul>

@@ -5,7 +5,7 @@ const ClientesModal = ({ closeModal, addCliente }) => {
     nombre: '',
     correo: '',
     telefono: '',
-    pais: 'PERÚ', // Valor predeterminado
+    pais: 'Perú', // Valor predeterminado
     distrito: '',
     rol: 'CLIENTE', // Valor predeterminado
     contraseña: '',
@@ -89,9 +89,9 @@ const ClientesModal = ({ closeModal, addCliente }) => {
               value={newClient.pais}
               onChange={handleInputChange}
             >
-              <option value="PERÚ">PERÚ</option>
-              <option value="CHILE">CHILE</option>
-              <option value="PANAMA">PANAMA</option>
+              <option value="Perú">PERÚ</option>
+              <option value="Chile">CHILE</option>
+              <option value="Panamá">PANAMA</option>
             </select>
           </div>
           <div className="form-group">
